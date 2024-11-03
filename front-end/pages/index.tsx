@@ -1,7 +1,6 @@
-import Head from "next/head";
+import Head from 'next/head';
 import styles from '@styles/home.module.css';
 import UserService from "service/UserService";
-import { redirect } from "next/dist/server/api-utils";
 
 const Home: React.FC = () => {
     return (
@@ -43,7 +42,8 @@ const Home: React.FC = () => {
             <p>Don't have an account? <a href="/registration">Sign up</a></p>
         </div>
       </>
+
     );
-  };
-  
-  export default Home;
+};
+
+export default Home;
