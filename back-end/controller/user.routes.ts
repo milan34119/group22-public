@@ -19,6 +19,16 @@ userRouter.get(
     }
   );
 
+userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await UserService.getUserById(Number(req.params.id));
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 userRouter.get('/:id/activities', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await UserService.getAllUserActivitiesById(Number(req.params.id));

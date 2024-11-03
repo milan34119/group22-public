@@ -1,20 +1,4 @@
-/* Basic reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f2f5;
-}
-
-.form-container {
+.form_container {
     width: 100%;
     max-width: 400px;
     padding: 2rem;
@@ -23,6 +7,17 @@ body {
     border-radius: 8px;
     text-align: center;
 }
+
+/* body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+}
+
+
 
 h2 {
     margin-bottom: 1.5rem;
@@ -76,4 +71,4 @@ a {
 
 a:hover {
     text-decoration: underline;
-}
+} */
