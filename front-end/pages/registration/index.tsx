@@ -24,8 +24,6 @@ const Home: React.FC = () => {
                     const response = await UserService.getAllUsers();
                     const json = await response.json();
                     const id = json.length
-
-                    //const id = 2;
                     await UserService.addUser({id, name, email, password})
                     window.location.replace(`/`);
 
