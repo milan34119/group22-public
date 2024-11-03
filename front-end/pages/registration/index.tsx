@@ -2,28 +2,41 @@ import Head from "next/head";
 import styles from '@styles/home.module.css';
 import UserService from "service/UserService";
 import { redirect } from "next/dist/server/api-utils";
+import { json } from "stream/consumers";
 
 const Home: React.FC = () => {
     return (
       <>
         <div className={styles.form_container}>
-            <h2>Login to TravelBlog</h2>
+            <h2>sign up to TravelBlog</h2>
             <form
                 onSubmit={async (e: React.SyntheticEvent) => {
                     e.preventDefault();
                     const target = e.target as typeof e.target & {
+                    name: {value: string};
                     email: { value: string };
                     password: { value: string };
                     };
                     const email = target.email.value; // typechecks!
                     const password = target.password.value; // typechecks!
+                    const name = target.name.value; // typechecks!
 
+                    const response = await UserService.getAllUsers();
+                    const json = await response.json();
+                    const id = json.length
 
-                    const id = (await (await UserService.login({email, password})).json()).id
-                    window.location.replace(`/user/${id}`);
+                    //const id = 2;
+                    await UserService.addUser({id, name, email, password})
+                    window.location.replace(`/`);
 
                 }}
             >
+                <div>
+                    <label>
+                    Name:
+                    <input type="name" name="name" required />
+                    </label>
+                </div>
                 <div>
                     <label>
                     Email:
@@ -37,10 +50,10 @@ const Home: React.FC = () => {
                     </label>
                 </div>
                 <div>
-                    <input type="submit" value="Log in" />
+                    <input type="submit" value="sign up" />
                 </div>
                 </form>
-            <p>Don't have an account? <a href="/registration">Sign up</a></p>
+            <p>already have an account? <a href="../">log in</a></p>
         </div>
       </>
     );
