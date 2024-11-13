@@ -1,78 +1,86 @@
 import { get } from 'http';
 import { Post } from '../model/Post';
-import { User } from '../model/User';
+import { User, extendedUser } from '../model/User';
+import database from '../util/database';
+import { tr } from 'date-fns/locale';
 
-const users: User[] = [];
+const getAllUsers = async (): Promise<extendedUser[]> => {
+    const prismaUsers = await database.user.findMany({include: {posts: true}});
+    return Promise.all(prismaUsers.map((user) => extendedUser.from(user)))
+};
 
-const testUser = new User({ id: 1, name: 'Test', email: 'test@email.com', password: 'PASSWORD' });
-const testPost = new Post(1, 'Title', 'Content', 'Location');
-testUser.addPost(testPost);
-users.push(testUser);
-
-const anotherUser = new User({
-    id: 2,
-    name: 'Another User',
-    email: 'another@email.com',
-    password: 'ANOTHER_PASSWORD',
-});
-const anotherPost = new Post(2, 'Another Title', 'Another Content', 'Another Location');
-anotherUser.addPost(anotherPost);
-users.push(anotherUser);
-
-const getAllUsers = (): User[] => users;
-
-const getUserById = ({ id }: { id: number }): User | null => {
+const getUserById = async ({ id }: { id: number }): Promise<extendedUser> => {
     try {
-        return users.find((user) => user.getId() === id) || null;
+        const prismaUser = await database.user.findUnique({
+            where: {id: id},
+            include: { posts: true}
+        })
+        if(!prismaUser) throw new Error("no user with that id");
+        return extendedUser.from(prismaUser)
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
 };
 
-const getAllUserActivitiesById = ({ id }: { id: number }): Post[] => {
-    const user = getUserById({ id });
-    if (user == null) throw new Error('user does not exist');
-    return user.getActivities();
+const getAllUserPostsById = async ({ id }: { id: number }): Promise<Post[]> => {
+    const user = await getUserById({ id });
+    if (!user) throw new Error('user with that id does not exist');
+    return user.getPosts();
 };
 
-const addActivityToUserById = ({ post, id }: { post: Post; id: number }): Post => {
-    const user = getUserById({ id });
-    if (user == null) throw new Error('user does not exist');
-    return user.addPost(post);
+const addPostToUserById = async ({ post, id }: { post: Post; id: number }): Promise<Post> => {
+    const createdPrismaPost = await database.post.create({
+        data: post
+    });
+    if(!createdPrismaPost) throw new Error("post not successfully created");
+    const createdPost = Post.from(createdPrismaPost)
+    const updatedPrismaUser = await database.user.update({
+        where: {id: id},
+        data: {
+            posts: {
+                connect: {id: createdPost.id}
+            }
+        }
+    })
+    if(!updatedPrismaUser) throw new Error("Post not correctly added to user");
+    return createdPost;
 };
 
-const addUser = ({
-    id,
-    name,
-    email,
-    password,
-}: {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-}): User => {
-    const user = new User({ id, name, email, password });
-    users.push(user);
-    return user;
+const addUser = async ({name, email, password}: {name: string, email: string, password: string}): Promise<extendedUser> => {
+    const prismaUser = await database.user.create({
+        data: {
+            name,
+            email,
+            password
+        },
+        include: {
+            posts: true
+        }
+    });
+    if(!prismaUser) throw new Error("database error when creating a new user");
+    return extendedUser.from(prismaUser);
 };
 
-const getUserByEmailAndPassword = ({
-    email,
-    password,
-}: {
-    email: string;
-    password: string;
-}): User | null => {
-    return users.find((user) => user.getEmail() === email && user.matchPassword(password)) || null;
+const getUserByEmailAndPassword = async ({email,password,}: {email: string; password: string;}): Promise<extendedUser|null> => {
+    const prismaUser = await database.user.findFirst({
+        where: {
+            email,
+            password
+        },
+        include: {
+            posts: true
+        }
+    });
+    if(!prismaUser) return null;
+    return extendedUser.from(prismaUser)
 };
 
 export default {
     getAllUsers,
     getUserById,
-    getAllUserActivitiesById,
-    addActivityToUserById,
+    getAllUserPostsById,
+    addPostToUserById,
     addUser,
     getUserByEmailAndPassword,
 };

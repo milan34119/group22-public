@@ -1,16 +1,17 @@
 import {
     User as UserPrisma,
     Post as PostPrisma,
+    User,
 } from '@prisma/client';
 
 export class Post {
     id: number;
     title: string;
     content: string;
-    createdAt: Date;
-    location: string | null;
+    createdAt?: Date;
+    location?: string;
 
-    constructor(post: {id: number, title: string, content: string, createdAt: Date,location: string | null}) {
+    constructor(post: {id?: number, title: string, content: string, createdAt?: Date,location?: string}) {
         this.validate(post);
 
         this.id = post.id;
@@ -20,10 +21,7 @@ export class Post {
         this.location = post.location;
     }
 
-    validate(post: { id: number; title: string; content: string }) {
-        if (!post.id) {
-            throw new Error('Post ID is required');
-        }
+    validate(post: { id?: number; title: string; content: string }) {
         if (!post.title) {
             throw new Error('Post title is required');
         }
@@ -40,6 +38,7 @@ export class Post {
         location,
         
     }:PostPrisma ) {
+        const test = createdAt
         return new Post({
             id,
             title,
@@ -49,3 +48,30 @@ export class Post {
         })
     }
 }
+
+// export class extendedPost extends Post {
+//     user: User
+
+//     constructor(post: {id?: number, title: string, content: string, createdAt: Date,location: string, user: User}) {
+//         super(post);
+//         this.user = post.user
+//     }
+//     static from({
+//         id,
+//         title,
+//         content,
+//         createdAt,
+//         location,
+//         user
+        
+//     }:PostPrisma & {user: UserPrisma} ) {
+//         return new extendedPost({
+//             id,
+//             title,
+//             content,
+//             createdAt,
+//             location,
+//             user
+//         })
+//     }
+// }

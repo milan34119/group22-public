@@ -10,16 +10,14 @@ export class User {
     name: string;
     email: string;
     password: string;
-    posts: Post[];
 
-    constructor(user : {id: number, name: string, email: string, password: string, posts: Post[]}) {
+    constructor(user : {id: number, name: string, email: string, password: string}) {
         this.validate(user);
 
         this.id = user.id;
         this.name = user.name;
         this.email = user.email;
         this.password = user.password;
-        this.posts = user.posts;
     }
 
     validate(user: {name: string, email: string, password: string}) {
@@ -42,18 +40,43 @@ export class User {
         return this.email;
     }
 
-    getActivities(): Post[] {
-        return this.posts;
-    }
+
 
     // we dont want to just return the password to outside of this object, that sounds dangerous
     matchPassword(password: string): boolean {
         return password === this.password;
     }
 
+    static from({
+        id,
+        name,
+        email,
+        password,
+    }: UserPrisma) {
+        return new User({
+            id,
+            name, 
+            email,
+            password,
+        });
+    }
+}
+
+export class extendedUser extends User {
+    posts: Post[]
+
+    constructor(user : {id: number, name: string, email: string, password: string, posts: Post[]}) {
+        super(user);
+        this.posts = user.posts;
+    }
+
     addPost(post: Post): Post {
         this.posts.push(post);
         return post;
+    }
+
+    getPosts(): Post[] {
+        return this.posts;
     }
 
     static from({
@@ -63,7 +86,7 @@ export class User {
         password,
         posts,
     }: UserPrisma & {posts: PostPrisma[]}) {
-        return new User({
+        return new extendedUser({
             id,
             name, 
             email,
@@ -72,4 +95,3 @@ export class User {
         });
     }
 }
-

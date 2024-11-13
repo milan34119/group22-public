@@ -1,18 +1,19 @@
-import { User } from '../../model/User';
+import { User, extendedUser } from '../../model/User';
 import { Post } from '../../model/Post';
 
 test('given valid user, then create user successfully', () => {
-    const user = new User({
+    const user = new extendedUser({
         id: 1,
         name: 'Test User',
         email: 'test@example.com',
         password: 'lalala123',
+        posts: []
     });
     expect(user.getId()).toBe(1);
     expect(user.getEmail()).toBe('test@example.com');
     expect(user.name).toBe('Test User');
     expect(user.password).toBe('lalala123');
-    expect(user.getActivities()).toEqual([]);
+    expect(user.getPosts()).toEqual([]);
 });
 
 test('given valid user, then match password successfully', () => {
@@ -27,15 +28,16 @@ test('given valid user, then match password successfully', () => {
 });
 
 test('given valid user, then add post successfully', () => {
-    const user = new User({
+    const user = new extendedUser({
         id: 1,
         name: 'Test User',
         email: 'test@example.com',
         password: 'lalala123',
+        posts: []
     });
-    const post = new Post(1, 'Test Title', 'Test Content');
+    const post = new Post({id:1, title:'Test Title', content:'Test Content'});
     user.addPost(post);
-    expect(user.getActivities()).toContain(post);
+    expect(user.getPosts()).toContain(post);
 });
 
 test('given invalid user, then throw error when missing name', () => {

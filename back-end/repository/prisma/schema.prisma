@@ -19,7 +19,7 @@ model Post{
     id Int @id @default(autoincrement())
     title String
     content String
-    createdAt DateTime @default(now())
-    location String
+    createdAt DateTime? @default(now())
+    location String? @default("")
     users User[]
 }
