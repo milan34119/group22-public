@@ -1,5 +1,9 @@
 import { th } from "date-fns/locale";
 import { Post } from "./Post";
+import {
+    User as UserPrisma,
+    Post as PostPrisma,
+} from '@prisma/client';
 
 export class User {
     id: number;
@@ -8,14 +12,14 @@ export class User {
     password: string;
     posts: Post[];
 
-    constructor(user : {id: number, name: string, email: string, password: string}) {
+    constructor(user : {id: number, name: string, email: string, password: string, posts: Post[]}) {
         this.validate(user);
 
         this.id = user.id;
         this.name = user.name;
         this.email = user.email;
         this.password = user.password;
-        this.posts = [];
+        this.posts = user.posts;
     }
 
     validate(user: {name: string, email: string, password: string}) {
@@ -51,4 +55,21 @@ export class User {
         this.posts.push(post);
         return post;
     }
+
+    static from({
+        id,
+        name,
+        email,
+        password,
+        posts,
+    }: UserPrisma & {posts: PostPrisma[]}) {
+        return new User({
+            id,
+            name, 
+            email,
+            password,
+            posts: posts.map((post) => Post.from(post))
+        });
+    }
 }
+
