@@ -24,7 +24,7 @@ const userRouter = express.Router();
  *         description: Internal server error.
  */
 
-userRouter.get('/allUsers', async (req: Request, res: Response) => {
+userRouter.get('/', async (req: Request, res: Response) => {
     try {
         const allUsers = await UserService.getAllUsers();
         res.status(200).json(allUsers);
