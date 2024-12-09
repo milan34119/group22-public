@@ -9,17 +9,58 @@ datasource db {
 
 model User{
     id Int @id @default(autoincrement())
-    name String 
+    name String @unique
     email String @unique
     password String
+    role String @default("user")
+
+    //relationships
     posts Post[]
+    planners Planner[]
 }
 
 model Post{
     id Int @id @default(autoincrement())
-    title String
-    content String
-    createdAt DateTime? @default(now())
-    location String? @default("")
-    users User[]
+    name String
+    description String?
+    comments String[]
+    createdAt DateTime @default(now())
+
+
+    //relationships
+    users User @relation(fields: [userId], references: [id])
+    userId Int
+    activity Activity @relation(fields: [activityId], references: [id])
+    activityId Int
+}
+
+model Planner{
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+
+  //relationships
+  activities Activity[]
+  User User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+model Activity{
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+
+  //relationships
+  location Location @relation(fields: [locationId], references: [id])
+  locationId Int
+  planners Planner[]
+  posts Post[]
+}
+
+model Location{
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+  //relationships
+  activities Activity[]
 }

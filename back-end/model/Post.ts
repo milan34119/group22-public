@@ -1,77 +1,51 @@
 import {
-    User as UserPrisma,
     Post as PostPrisma,
-    User,
+    Activity as ActivityPrisma,
+    Location as LocationPrisma,
 } from '@prisma/client';
+import { Activity } from './Activity';
 
 export class Post {
-    id: number;
-    title: string;
-    content: string;
-    createdAt?: Date;
-    location?: string;
+    readonly id: number;
+    readonly name: string;
+    readonly description?: string;
+    readonly comments: string[];
+    readonly createdAt?: Date;
+    readonly activity: Activity;
 
-    constructor(post: {id?: number, title: string, content: string, createdAt?: Date,location?: string}) {
+    constructor(post: {id?: number, name: string, description?: string, comments: string[] ,createdAt?: Date, activity: Activity}) {
         this.validate(post);
 
         this.id = post.id;
-        this.title = post.title;
-        this.content = post.content;
+        this.name = post.name;
+        this.description = post.description;
+        this.comments = post.comments;
         this.createdAt = post.createdAt;
-        this.location = post.location;
+        this.activity = post.activity;
     }
 
-    validate(post: { id?: number; title: string; content: string }) {
-        if (!post.title) {
-            throw new Error('Post title is required');
+    validate(post: {id?: number, name: string, description?: string, comments: string[] ,createdAt?: Date, activity: Activity}) {
+        if (!post.name) {
+            throw new Error('name is required for Post.');
         }
-        if (!post.content) {
-            throw new Error('Post content is required');
+        if (!post.activity) {
+            throw new Error("activity is required for Post.")
         }
     }
 
     static from({
         id,
-        title,
-        content,
-        createdAt,
-        location,
-        
-    }:PostPrisma ) {
-        const test = createdAt
+        name,
+        description,
+        comments,
+        activity
+    }:PostPrisma & {activity: ActivityPrisma & {location:LocationPrisma} }) {
         return new Post({
             id,
-            title,
-            content,
-            createdAt,
-            location
+            name,
+            description,
+            comments,
+            activity: Activity.from(activity)
         })
     }
 }
-
-// export class extendedPost extends Post {
-//     user: User
-
-//     constructor(post: {id?: number, title: string, content: string, createdAt: Date,location: string, user: User}) {
-//         super(post);
-//         this.user = post.user
-//     }
-//     static from({
-//         id,
-//         title,
-//         content,
-//         createdAt,
-//         location,
-//         user
-        
-//     }:PostPrisma & {user: UserPrisma} ) {
-//         return new extendedPost({
-//             id,
-//             title,
-//             content,
-//             createdAt,
-//             location,
-//             user
-//         })
-//     }
-// }
