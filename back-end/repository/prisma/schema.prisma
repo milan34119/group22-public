@@ -28,7 +28,7 @@ model Post{
 
 
     //relationships
-    users User @relation(fields: [userId], references: [id])
+    user User @relation(fields: [userId], references: [id])
     userId Int
     activity Activity @relation(fields: [activityId], references: [id])
     activityId Int
