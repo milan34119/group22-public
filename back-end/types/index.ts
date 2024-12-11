@@ -1,15 +1,39 @@
 type PostInput = {
-    id: number;
-    title: string;
-    content: string;
-    createdAt: Date;
-    location: string;
+    id?: number;
+    name: string;
+    description?: string;
+    comments: string[];
+    activity?: ActivityInput;
 }
 
 type UserInput = {
+    id?: number;
     name: string;
     email: string;
     password: string;
+    role: string;
+    posts?: PostInput[];
+    planners?: PlannerInput[];
+}
+
+type PlannerInput = {
+    id?: number;
+    name: string;
+    description?: string;
+    activities?: ActivityInput[]
+}
+
+type ActivityInput = {
+    id?: number;
+    name: string;
+    description?: string;
+    location?: LocationInput
+}
+
+type LocationInput = {
+    id?: number;
+    name: string;
+    description?: string;
 }
 
 type LoginInput = {
@@ -20,5 +44,8 @@ type LoginInput = {
 export {
     PostInput,
     UserInput,
+    ActivityInput,
+    LocationInput,
+    PlannerInput,
     LoginInput,
 }

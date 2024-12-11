@@ -1,6 +1,7 @@
 import { User } from "@prisma/client"
 import { Post } from "../model/Post"
 import database from "../util/database"
+import { Activity } from "../model/Activity"
 
 const getAllPosts = async (): Promise<Post[]> => {
     const prismaPosts = await database.post.findMany({
@@ -9,14 +10,14 @@ const getAllPosts = async (): Promise<Post[]> => {
     return Promise.all(prismaPosts.map((post) => Post.from(post)))
 }
 
-const createNewPostForUserByUid = async ({name, description, comments, activity, userId}: Post & {userId: number}): Promise<Post> => {
+const createNewPostForUserByUid = async (post: {name: string, description?: string, comments: string[], activity: Activity}, userId:number): Promise<Post> => {
     const prismaPost = await database.post.create({
         data: {
-            name, 
-            description,
-            comments,    
+            name: post.name, 
+            description: post.description,
+            comments: post.comments,    
             activity: {
-                connect: {id: activity.id}
+                connect: {id: post.activity.id}
             },
             user: {
                 connect: {id: userId}

@@ -1,7 +1,11 @@
 import UserService from '../service/User.service';
 import express, { NextFunction, Request, Response } from 'express';
-import { LoginInput, PostInput, UserInput } from '../types';
+import { LoginInput, PostInput, UserInput, ActivityInput } from '../types';
 import { Post } from '../model/Post';
+import postDb from '../repository/post.db';
+import { Activity } from '../model/Activity';
+import { User } from '../model/User';
+import PostService from '../service/Post.service';
 
 const userRouter = express.Router();
 
@@ -68,14 +72,14 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
-userRouter.get('/:id/activities', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const user = await UserService.getAllUserActivitiesById(Number(req.params.id));
-        res.status(200).json(user);
-    } catch (error) {
-        next(error);
-    }
-});
+// userRouter.get('/:id/activities', async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const user = await UserService.getAllUserActivitiesById(Number(req.params.id));
+//         res.status(200).json(user);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 // userRouter.post('/:id/activity', async (req: Request, res: Response, next: NextFunction) => {
 //     try {
@@ -87,11 +91,11 @@ userRouter.get('/:id/activities', async (req: Request, res: Response, next: Next
 //     }
 // });
 
-userRouter.post('/:id/activity', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/:id/post', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id, title, content, location } = req.body as PostInput;
-        const post = new Post({id, title, content, location});
-        const result = await UserService.addActivityToUserById(post, Number(req.params.id));
+        const post = <PostInput>req.body
+        const id = Number(req.params.id)
+        const result = await PostService.addActivityToUserById(post, id);
         res.status(200).json(result);
     } catch (error) {
         next(error);

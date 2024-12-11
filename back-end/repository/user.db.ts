@@ -48,7 +48,7 @@ const addUser = async ({name, email, password, role}: User): Promise<User> => {
     return User.from(prismaUser);
 };
 
-const getUserByEmailAndPassword = async ({email,password,}:User): Promise<User|null> => {
+const getUserByEmailAndPassword = async ({email,password,}: {email: string, password: string}): Promise<User|null> => {
     const prismaUser = await database.user.findFirst({
         where: {
             email,

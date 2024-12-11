@@ -9,7 +9,7 @@ export class Planner {
     readonly id: number;
     readonly name: string;
     readonly description?: string;
-    readonly Activities: Activity[];
+    readonly activities: Activity[];
 
     constructor(planner: {id?: number, name: string, description?: string, activities: Activity[]}) {
         this.validate(planner);
@@ -17,7 +17,7 @@ export class Planner {
         this.id = planner.id;
         this.name = planner.name;
         this.description = planner.description;
-        this.Activities = planner.activities;
+        this.activities = planner.activities;
     }
 
     validate(planner: {id?: number, name: string, description?: string, activities: Activity[]}) {

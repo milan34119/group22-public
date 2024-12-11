@@ -4,6 +4,7 @@ import {
     Location as LocationPrisma,
 } from '@prisma/client';
 import { Activity } from './Activity';
+import { User } from './User';
 
 export class Post {
     readonly id: number;
@@ -13,7 +14,7 @@ export class Post {
     readonly createdAt?: Date;
     readonly activity: Activity;
 
-    constructor(post: {id?: number, name: string, description?: string, comments: string[] ,createdAt?: Date, activity: Activity}) {
+    constructor(post: {id?: number, name: string, description?: string, comments: string[] ,createdAt?: Date,activity: Activity}) {
         this.validate(post);
 
         this.id = post.id;
@@ -24,7 +25,7 @@ export class Post {
         this.activity = post.activity;
     }
 
-    validate(post: {id?: number, name: string, description?: string, comments: string[] ,createdAt?: Date, activity: Activity}) {
+    validate(post: {id?: number, name: string, description?: string, comments: string[] ,createdAt?: Date,activity: Activity}) {
         if (!post.name) {
             throw new Error('name is required for Post.');
         }

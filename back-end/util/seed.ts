@@ -89,7 +89,7 @@ const main = async () => {
             name: "Bezoek basiliek",
             description: "Een bezoek aan de basiliek van lyon.",
             location: {
-                connect: brussel
+                connect: lyon
             }
         }
     });
@@ -102,7 +102,7 @@ const main = async () => {
             activity: {
                 connect: basiliek
             },
-            users: {
+            user: {
                 connect: casper
             }
         }
@@ -115,7 +115,7 @@ const main = async () => {
             activity: {
                 connect: stadhuis
             },
-            users: {
+            user: {
                 connect: casper
             }
         }
@@ -128,7 +128,7 @@ const main = async () => {
             activity: {
                 connect: stadhuis
             },
-            users: {
+            user: {
                 connect: milan
             }
         }
@@ -141,7 +141,7 @@ const main = async () => {
             activity: {
                 connect: atomium
             },
-            users: {
+            user: {
                 connect: milan
             }
         }
