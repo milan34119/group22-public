@@ -10,7 +10,7 @@ const addActivityToUserById = async ({
     comments,
     activity
 }: PostInput, id: number): Promise<Post> => {
-    const gotActivity = await ActivityDb.getActivityById(activity.id)
+    const gotActivity = await ActivityDb.getActivity(activity.id)
     const post = new Post({name, description, comments, activity: gotActivity})
     return await postDb.createNewPostForUserByUid(post, id);
 };
