@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
 import Link from 'next/link';
 
 const Header: React.FC = () => {
-    const email = sessionStorage.getItem('loggedInUser');
+    const [email, setEmail] = useState<string | null>(null);
+
+    useEffect(() => {
+        const loggedInUser = sessionStorage.getItem('loggedInUser');
+        setEmail(loggedInUser);
+    }, []);
+
     const handleLogout = () => {
         sessionStorage.removeItem('loggedInUser');
+        setEmail(null);
     };
 
     return (
@@ -21,6 +28,11 @@ const Header: React.FC = () => {
                     {!email && (
                         <Link href="/user/login" passHref>
                             <Button color="inherit">Login</Button>
+                        </Link>
+                    )}
+                    {!email && (
+                        <Link href="/user/registration">
+                            <Button color="inherit">Register</Button>
                         </Link>
                     )}
                     {email && (

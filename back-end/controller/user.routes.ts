@@ -118,4 +118,10 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+// userRouter.get('/register', async(req: Request, res: Response, next: NextFunction) => {
+//     try {
+
+//     }
+// })
+
 export { userRouter };

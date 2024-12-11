@@ -1,75 +1,79 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Container, Box, Typography, TextField, Button, Link, Alert } from '@mui/material';
-import UserService from 'service/UserService';
-import styles from '@styles/home.module.css';
 import { useState } from 'react';
+import styles from '@styles/home.module.css';
 import { StatusMessage } from '@types';
 
-const Home: React.FC = () => {
+const Registration: React.FC = () => {
     const router = useRouter();
 
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState<String | null>(null);
+    const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState<{ name?: string; email?: string; password?: string }>({});
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
     const clearErrors = () => {
-        setEmailError(null);
+        setErrors({});
         setStatusMessages([]);
     };
 
     const validate = (): boolean => {
-        let result = true;
+        let valid = true;
+        const newErrors: typeof errors = {};
 
+        if (!name || name.trim() === '') {
+            newErrors.name = 'Name cannot be empty.';
+            valid = false;
+        }
         if (!email || email.trim() === '') {
-            setEmailError('Name cannot be empty.');
-            result = false;
+            newErrors.email = 'Email cannot be empty.';
+            valid = false;
+        }
+        if (!password || password.length < 6) {
+            newErrors.password = 'Password must be at least 6 characters long.';
+            valid = false;
         }
 
-        return result;
+        setErrors(newErrors);
+        return valid;
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         clearErrors();
+
         if (!validate()) {
             return;
         }
 
-        sessionStorage.setItem('loggedInUser', email);
+        try {
+            // Simulate registration API call
+            // Replace this with actual API interaction
+            await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        setStatusMessages([
-            ...statusMessages,
-            {
-                type: 'success',
-                message: 'Login successful. Redirecting to homepage...',
-            },
-        ]);
-
-        setTimeout(() => router.push('/'), 2000);
-
-        // const formData = new FormData(e.currentTarget);
-        // const email = formData.get('email') as string;
-        // const password = formData.get('password') as string;
-
-        // try {
-        //     const response = await UserService.login({ email, password });
-        //     const data = await response.json();
-        //     const id = data.id;
-
-        //     if (id) {
-        //         router.replace(`/user/${id}`);
-        //     }
-        // } catch (error) {
-        //     console.error('Login failed', error);
-        // }
+            setStatusMessages([
+                {
+                    type: 'success',
+                    message: 'Registration successful! Redirecting to login page...',
+                },
+            ]);
+            setTimeout(() => router.push('/login'), 2000);
+        } catch (error) {
+            setStatusMessages([
+                {
+                    type: 'error',
+                    message: 'Registration failed. Please try again.',
+                },
+            ]);
+        }
     };
 
     return (
         <>
             <Head>
-                <title>Login - TravelBlog</title>
+                <title>Register - TravelBlog</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
 
@@ -87,7 +91,7 @@ const Home: React.FC = () => {
                     }}
                 >
                     <Typography component="h1" variant="h5">
-                        Login to TravelBlog
+                        Create an Account
                     </Typography>
 
                     <Box sx={{ width: '100%', mb: 2 }}>
@@ -103,15 +107,26 @@ const Home: React.FC = () => {
                             margin="normal"
                             required
                             fullWidth
+                            id="name"
+                            label="Name"
+                            name="name"
+                            autoComplete="name"
+                            autoFocus
+                            onChange={(e) => setName(e.target.value)}
+                            error={!!errors.name}
+                            helperText={errors.name}
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
                             id="email"
                             label="Email Address"
                             name="email"
                             autoComplete="email"
-                            autoFocus
-                            type="email"
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                            }}
+                            onChange={(e) => setEmail(e.target.value)}
+                            error={!!errors.email}
+                            helperText={errors.email}
                         />
                         <TextField
                             margin="normal"
@@ -121,7 +136,10 @@ const Home: React.FC = () => {
                             label="Password"
                             type="password"
                             id="password"
-                            autoComplete="current-password"
+                            autoComplete="new-password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            error={!!errors.password}
+                            helperText={errors.password}
                         />
                         <Button
                             type="submit"
@@ -130,12 +148,12 @@ const Home: React.FC = () => {
                             color="primary"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            Log in
+                            Sign up
                         </Button>
                         <Typography variant="body2" align="center">
-                            Don’t have an account?
-                            <Link href="/user/registration" variant="body2">
-                                Sign up
+                            Already have an account?{' '}
+                            <Link href="/login" variant="body2">
+                                Log in
                             </Link>
                         </Typography>
                     </Box>
@@ -145,4 +163,4 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
+export default Registration;
