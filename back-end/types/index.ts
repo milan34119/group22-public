@@ -3,11 +3,10 @@ type PostInput = {
     title: string;
     content: string;
     createdAt: Date;
-    location: string | null;
+    location: string;
 }
 
 type UserInput = {
-    id: number;
     name: string;
     email: string;
     password: string;

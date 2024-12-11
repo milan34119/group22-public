@@ -1,24 +1,36 @@
 import { th } from "date-fns/locale";
 import { Post } from "./Post";
+import { Planner } from "./Planner";
+import {
+    User as UserPrisma,
+    Post as PostPrisma,
+    Planner as PlannerPrisma,
+    Activity as ActivityPrisma,
+    Location as LocationPrisma,
+} from '@prisma/client';
 
 export class User {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-    posts: Post[];
+    readonly id: number;
+    readonly name: string;
+    readonly email: string;
+    readonly password: string;
+    readonly role: string;
+    readonly posts: Post[];
+    readonly planners: Planner[];
 
-    constructor(user : {id: number, name: string, email: string, password: string}) {
+    constructor(user:{id?: number, name: string, email: string, password: string, role: string, posts: Post[], planners: Planner[]}) {
         this.validate(user);
 
         this.id = user.id;
         this.name = user.name;
         this.email = user.email;
         this.password = user.password;
-        this.posts = [];
+        this.role = user.role;
+        this.posts = user.posts;
+        this.planners = user.planners
     }
 
-    validate(user: {name: string, email: string, password: string}) {
+    validate(user:{id?: number, name: string, email: string, password: string, role: string, posts: Post[], planners: Planner[]}) {
         if (!user.name){
             throw new Error("User name is required")
         }
@@ -30,25 +42,23 @@ export class User {
         }
     }
 
-    getId(): number | undefined {
-        return this.id;
-    }
-
-    getEmail(): string{
-        return this.email;
-    }
-
-    getActivities(): Post[] {
-        return this.posts;
-    }
-
-    // we dont want to just return the password to outside of this object, that sounds dangerous
-    matchPassword(password: string): boolean {
-        return password === this.password;
-    }
-
-    addPost(post: Post): Post {
-        this.posts.push(post);
-        return post;
+    static from({
+        id,
+        name,
+        email,
+        password,
+        role,
+        posts,
+        planners
+    }: UserPrisma & {planners: (PlannerPrisma & {activities: (ActivityPrisma & {location: LocationPrisma})[]})[]} & {posts: (PostPrisma & {activity: ActivityPrisma & {location:LocationPrisma} })[]}) {
+        return new User({
+            id,
+            name, 
+            email,
+            password,
+            role,
+            posts: posts.map(post => Post.from(post)),
+            planners: planners.map(planner => Planner.from(planner))
+        });
     }
 }

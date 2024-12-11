@@ -1,78 +1,71 @@
 import { get } from 'http';
 import { Post } from '../model/Post';
 import { User } from '../model/User';
+import database from '../util/database';
+import { tr } from 'date-fns/locale';
+import { Activity } from '../model/Activity';
 
-const users: User[] = [];
+const getAllUsers = async (): Promise<User[]> => {
+    const prismaUsers = await database.user.findMany({
+        include: {
+            planners: {include: {activities: {include: {location: true}}}},
+            posts: {include: {activity: {include: {location: true}}}},
+        }});
+    return Promise.all(prismaUsers.map((user) => User.from(user)))
+};
 
-const testUser = new User({ id: 1, name: 'Test', email: 'test@email.com', password: 'PASSWORD' });
-const testPost = new Post(1, 'Title', 'Content', 'Location');
-testUser.addPost(testPost);
-users.push(testUser);
-
-const anotherUser = new User({
-    id: 2,
-    name: 'Another User',
-    email: 'another@email.com',
-    password: 'ANOTHER_PASSWORD',
-});
-const anotherPost = new Post(2, 'Another Title', 'Another Content', 'Another Location');
-anotherUser.addPost(anotherPost);
-users.push(anotherUser);
-
-const getAllUsers = (): User[] => users;
-
-const getUserById = ({ id }: { id: number }): User | null => {
+const getUserById = async (id: number): Promise<User> => {
     try {
-        return users.find((user) => user.getId() === id) || null;
+        const prismaUser = await database.user.findUnique({
+            where: {id},
+            include: {
+                planners: {include: {activities: {include: {location: true}}}},
+                posts: {include: {activity: {include: {location: true}}}},
+            }
+        })
+        if(!prismaUser) throw new Error("no user with that id");
+        return User.from(prismaUser)
     } catch (error) {
         console.error(error);
-        throw new Error('Database error. See server log for details.');
+        throw new Error('Database error when getting user by id. See server log for details.');
     }
 };
 
-const getAllUserActivitiesById = ({ id }: { id: number }): Post[] => {
-    const user = getUserById({ id });
-    if (user == null) throw new Error('user does not exist');
-    return user.getActivities();
+const addUser = async ({name, email, password, role}: User): Promise<User> => {
+    const prismaUser = await database.user.create({
+        data: {
+            name,
+            email,
+            password,
+            role
+        },
+        include: {
+            planners: {include: {activities: {include: {location: true}}}},
+            posts: {include: {activity: {include: {location: true}}}},
+        }
+    });
+    if(!prismaUser) throw new Error("database error when creating a new user");
+    return User.from(prismaUser);
 };
 
-const addActivityToUserById = ({ post, id }: { post: Post; id: number }): Post => {
-    const user = getUserById({ id });
-    if (user == null) throw new Error('user does not exist');
-    return user.addPost(post);
-};
-
-const addUser = ({
-    id,
-    name,
-    email,
-    password,
-}: {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-}): User => {
-    const user = new User({ id, name, email, password });
-    users.push(user);
-    return user;
-};
-
-const getUserByEmailAndPassword = ({
-    email,
-    password,
-}: {
-    email: string;
-    password: string;
-}): User | null => {
-    return users.find((user) => user.getEmail() === email && user.matchPassword(password)) || null;
+const getUserByEmailAndPassword = async ({email,password,}:User): Promise<User|null> => {
+    const prismaUser = await database.user.findFirst({
+        where: {
+            email,
+            password
+        },
+        include: {
+            planners: {include: {activities: {include: {location: true}}}},
+            posts: {include: {activity: {include: {location: true}}}},
+        }
+    });
+    if(!prismaUser) return null;
+    return User.from(prismaUser)
 };
 
 export default {
     getAllUsers,
     getUserById,
-    getAllUserActivitiesById,
-    addActivityToUserById,
     addUser,
     getUserByEmailAndPassword,
 };

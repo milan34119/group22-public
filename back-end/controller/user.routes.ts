@@ -90,7 +90,7 @@ userRouter.get('/:id/activities', async (req: Request, res: Response, next: Next
 userRouter.post('/:id/activity', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id, title, content, location } = req.body as PostInput;
-        const post = new Post(id, title, content, location);
+        const post = new Post({id, title, content, location});
         const result = await UserService.addActivityToUserById(post, Number(req.params.id));
         res.status(200).json(result);
     } catch (error) {
