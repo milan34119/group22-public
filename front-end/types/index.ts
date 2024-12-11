@@ -4,7 +4,7 @@ export type User = {
     email: string;
     password: string;
     posts: Post[];
-}
+};
 
 export type Post = {
     id: number;
@@ -12,4 +12,9 @@ export type Post = {
     content: string;
     createdAt: Date;
     location: string | null;
-}
+};
+
+export type StatusMessage = {
+    message: string;
+    type: 'error' | 'success';
+};

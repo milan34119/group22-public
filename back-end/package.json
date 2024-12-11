@@ -18,6 +18,7 @@
         "execMap": {
             "ts": "ts-node"
         }
+    
     },
     "dependencies": {
         "@prisma/client": "^5.1.1",
