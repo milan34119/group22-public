@@ -134,7 +134,7 @@ const Home: React.FC = () => {
                         </Button>
                         <Typography variant="body2" align="center">
                             Don’t have an account?
-                            <Link href="/registration" variant="body2">
+                            <Link href="/registration/signup" variant="body2">
                                 Sign up
                             </Link>
                         </Typography>

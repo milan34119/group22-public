@@ -148,6 +148,7 @@
 import Head from 'next/head';
 import { Container, Typography, Box, AppBar, Toolbar, Card, CardContent } from '@mui/material';
 import Header from 'components/Header';
+import withAuth from 'util/withAuth';
 
 const Home: React.FC = () => {
     return (
@@ -159,7 +160,7 @@ const Home: React.FC = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <Header></Header>
+            {/* <Header></Header> */}
 
             <Container maxWidth="md" sx={{ mt: 4 }}>
                 <Typography variant="h3" align="center" gutterBottom>
@@ -226,4 +227,4 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
+export default withAuth(Home);

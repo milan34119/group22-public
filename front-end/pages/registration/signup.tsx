@@ -65,7 +65,7 @@ import React, { ReactComponentElement } from 'react';
 import router, { useRouter } from 'next/router';
 import { Box, Button, Container, Link, TextField, Typography } from '@mui/material';
 
-const Home: React.FC = () => {
+const UserSignupPage: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -73,17 +73,18 @@ const Home: React.FC = () => {
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
 
-        // try {
-        //     // const response = await UserService.addUser({ name, email, password });
-        //     // const data = await response.json();
-        //     // const id = data.id;
+        try {
+            const response = await UserService.addUser({ name, email, password });
+            const data = await response.json();
+            const id = data.id;
 
-        //     if (id) {
-        //         router.replace(`/user/${id}`);
-        //     }
-        // } catch (error) {
-        //     console.error('Login failed', error);
-        // }
+            if (id) {
+                router.replace('/');
+                // router.replace(`/user/${id}`);
+            }
+        } catch (error) {
+            console.error('Login failed', error);
+        }
     };
     return (
         <>
@@ -160,4 +161,4 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
+export default UserSignupPage;

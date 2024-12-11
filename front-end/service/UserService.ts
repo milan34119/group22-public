@@ -35,7 +35,7 @@ const getAllUserActivitiesById = async (id: number) => {
     })
   };
 
-const addUser = async (content: {id: number, name: string, email: string, password: string;}) => {
+const addUser = async (content: {name: string, email: string, password: string;}) => {
     return await fetch(process.env.NEXT_PUBLIC_API_URL + '/user', {
         method: "POST",
         body: JSON.stringify(content),
