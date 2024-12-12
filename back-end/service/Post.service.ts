@@ -15,6 +15,11 @@ const addActivityToUserById = async ({
     return await postDb.createNewPostForUserByUid(post, id);
 };
 
+const getAllPosts = async ():Promise<Post[]> => {
+    return await postDb.getAllPosts();
+}
+
 export default{
     addActivityToUserById,
+    getAllPosts,
 }

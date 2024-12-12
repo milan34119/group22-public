@@ -11,7 +11,6 @@ const Home: React.FC = () => {
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState<String | null>(null);
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
@@ -23,7 +22,7 @@ const Home: React.FC = () => {
     const validate = (): boolean => {
         let result = true;
 
-        if (!email || email.trim() === '') {
+        if (!username || username.trim() === '') {
             setEmailError('Name cannot be empty.');
             result = false;
         }
@@ -40,8 +39,9 @@ const Home: React.FC = () => {
         }
 
         const user = { username, password };
+        console.log(user)
         const response = await UserService.loginUser(user);
-
+        
         if (response.status === 200) {
             setStatusMessages([{ message: t('login success'), type: 'success' }]);
 
@@ -53,7 +53,7 @@ const Home: React.FC = () => {
             localStorage.setItem('token', user.token);
         }
 
-        sessionStorage.setItem('loggedInUser', email);
+        sessionStorage.setItem('loggedInUser', username);
 
         setStatusMessages([
             ...statusMessages,
@@ -119,14 +119,14 @@ const Home: React.FC = () => {
                             margin="normal"
                             required
                             fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
+                            id="username"
+                            label="Username"
+                            name="username"
+                            autoComplete="username"
                             autoFocus
-                            type="email"
+                            type="text"
                             onChange={(e) => {
-                                setEmail(e.target.value);
+                                setUsername(e.target.value);
                             }}
                         />
                         <TextField
@@ -138,6 +138,9 @@ const Home: React.FC = () => {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                            }}
                         />
                         <Button
                             type="submit"

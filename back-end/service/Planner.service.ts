@@ -22,3 +22,9 @@ const createPlannerForUser = async ({
     const planner = new Planner({name, description, activities})
     return await PlannerDb.createPlanner(planner, userId)
 }
+
+export default {
+    getAllPlanners,
+    getPlanner,
+    createPlannerForUser,
+}

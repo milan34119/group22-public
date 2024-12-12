@@ -9,12 +9,12 @@ import { connect } from 'http2';
 const prisma = new PrismaClient();
 
 const main = async () => {
-    await prisma.location.deleteMany();
-    await prisma.activity.deleteMany();
+    
     await prisma.planner.deleteMany();
     await prisma.post.deleteMany();
     await prisma.user.deleteMany();
-
+    await prisma.activity.deleteMany();
+    await prisma.location.deleteMany();
 
     //LOCATIONS
     const leuven = await prisma.location.create({
@@ -40,9 +40,10 @@ const main = async () => {
     //USERS
     const casper = await prisma.user.create({
         data: {
-            name: "Casper123",
+            name: "casper",
+            username: "casper123",
             email: "casper@gmail.com",
-            password: "password123",
+            password: await bcrypt.hash("password123", 12),
             role: "admin"
         }
     });
@@ -50,16 +51,18 @@ const main = async () => {
     const milan = await prisma.user.create({
         data: {
             name: "Milan",
+            username: "Milan",
             email: "milan@gmail.com",
-            password: "1234567"
+            password: await bcrypt.hash("1234567", 12)
         }
     });
 
     const dummy = await prisma.user.create({
         data: {
             name: "Dummy",
+            username: "dummy",
             email: "dummy@gmail.com",
-            password: "dummydummy1"
+            password: await bcrypt.hash("dummydummy1", 12)
         }
     })
 
