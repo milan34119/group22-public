@@ -7,9 +7,9 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
         const [isLoading, setIsLoading] = useState(true);
 
         useEffect(() => {
-            const token = sessionStorage.getItem('token');
+            const token = localStorage.getItem('token');
             if (!token) {
-                router.push('/registration/login');
+                router.push('/user/login');
             } else {
                 setIsLoading(false);
             }

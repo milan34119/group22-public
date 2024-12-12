@@ -4,42 +4,49 @@ type PostInput = {
     description?: string;
     comments: string[];
     activity?: ActivityInput;
-}
+};
 
 type UserInput = {
     id?: number;
     name: string;
+    username: string;
     email: string;
     password: string;
     role: string;
     posts?: PostInput[];
     planners?: PlannerInput[];
-}
+};
 
 type PlannerInput = {
     id?: number;
     name: string;
     description?: string;
-    activities?: ActivityInput[]
-}
+    activities?: ActivityInput[];
+};
 
 type ActivityInput = {
     id?: number;
     name: string;
     description?: string;
-    location?: LocationInput
-}
+    location?: LocationInput;
+};
 
 type LocationInput = {
     id?: number;
     name: string;
     description?: string;
-}
+};
 
 type LoginInput = {
     email: string;
     password: string;
-}
+};
+
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    name: string;
+};
 
 export {
     PostInput,
@@ -48,4 +55,5 @@ export {
     LocationInput,
     PlannerInput,
     LoginInput,
-}
+    AuthenticationResponse,
+};

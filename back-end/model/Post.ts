@@ -14,7 +14,14 @@ export class Post {
     readonly createdAt?: Date;
     readonly activity: Activity;
 
-    constructor(post: {id?: number, name: string, description?: string, comments: string[] ,createdAt?: Date,activity: Activity}) {
+    constructor(post: {
+        id?: number;
+        name: string;
+        description?: string;
+        comments: string[];
+        createdAt?: Date;
+        activity: Activity;
+    }) {
         this.validate(post);
 
         this.id = post.id;
@@ -25,12 +32,19 @@ export class Post {
         this.activity = post.activity;
     }
 
-    validate(post: {id?: number, name: string, description?: string, comments: string[] ,createdAt?: Date,activity: Activity}) {
+    validate(post: {
+        id?: number;
+        name: string;
+        description?: string;
+        comments: string[];
+        createdAt?: Date;
+        activity: Activity;
+    }) {
         if (!post.name) {
             throw new Error('name is required for Post.');
         }
         if (!post.activity) {
-            throw new Error("activity is required for Post.")
+            throw new Error('activity is required for Post.');
         }
     }
 
@@ -39,14 +53,14 @@ export class Post {
         name,
         description,
         comments,
-        activity
-    }:PostPrisma & {activity: ActivityPrisma & {location:LocationPrisma} }) {
+        activity,
+    }: PostPrisma & { activity: ActivityPrisma & { location: LocationPrisma } }) {
         return new Post({
             id,
             name,
             description,
             comments,
-            activity: Activity.from(activity)
-        })
+            activity: Activity.from(activity),
+        });
     }
 }

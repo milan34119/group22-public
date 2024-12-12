@@ -93,8 +93,8 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 
 userRouter.post('/:id/post', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const post = <PostInput>req.body
-        const id = Number(req.params.id)
+        const post = <PostInput>req.body;
+        const id = Number(req.params.id);
         const result = await PostService.addActivityToUserById(post, id);
         res.status(200).json(result);
     } catch (error) {
@@ -102,21 +102,113 @@ userRouter.post('/:id/post', async (req: Request, res: Response, next: NextFunct
     }
 });
 
-userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @swagger
+ * /user/registration:
+ *   post:
+ *     summary: Registreer een nieuwe gebruiker
+ *     description: Deze route maakt een nieuwe gebruiker aan in het systeem met de opgegeven gegevens.
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "John Doe"
+ *                 description: "De naam van de gebruiker."
+ *               email:
+ *                 type: string
+ *                 example: "johndoe@example.com"
+ *                 description: "Het e-mailadres van de gebruiker. Moet uniek zijn."
+ *               password:
+ *                 type: string
+ *                 example: "password123"
+ *                 description: "Het wachtwoord van de gebruiker."
+ *               role:
+ *                 type: string
+ *                 example: "user"
+ *                 description: "De rol van de gebruiker. Bijvoorbeeld 'admin' of 'user'."
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *               - role
+ *     responses:
+ *       200:
+ *         description: Gebruiker succesvol geregistreerd.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: "1"
+ *                   description: "De unieke ID van de aangemaakte gebruiker."
+ *                 name:
+ *                   type: string
+ *                   example: "John Doe"
+ *                   description: "De naam van de aangemaakte gebruiker."
+ *                 email:
+ *                   type: string
+ *                   example: "johndoe@example.com"
+ *                   description: "Het e-mailadres van de aangemaakte gebruiker."
+ *                 role:
+ *                   type: string
+ *                   example: "user"
+ *                   description: "De rol van de aangemaakte gebruiker."
+ *       400:
+ *         description: Ongeldige invoerdata. Bijvoorbeeld ontbrekende velden of onjuist e-mailadres.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Invalid input data. Email must be unique."
+ *       500:
+ *         description: Interne serverfout.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "An unexpected error occurred."
+ */
+
+userRouter.post('/registration', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = <UserInput>req.body;
-        const result = await UserService.addUser(user);
+        const result = await UserService.createUser(user);
         res.status(200).json(result);
     } catch (error) {
         next(error);
     }
 });
 
+// userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const login = <LoginInput>req.body;
+//         const result = await UserService.login(login);
+//         res.status(200).json(result);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
+
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const login = <LoginInput>req.body;
-        const result = await UserService.login(login);
-        res.status(200).json(result);
+        const userInput = <UserInput>req.body;
+        const response = await UserService.authenticate(userInput);
+        res.status(200).json({ message: 'Auth succesful', ...response });
     } catch (error) {
         next(error);
     }

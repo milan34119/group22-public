@@ -150,7 +150,7 @@ const UserSignupPage: React.FC = () => {
                         </Button>
                         <Typography variant="body2" align="center">
                             Already have an account?
-                            <Link href="/" variant="body2">
+                            <Link href="/user/login" variant="body2">
                                 Log in
                             </Link>
                         </Typography>

@@ -5,10 +5,12 @@ import UserService from 'service/UserService';
 import styles from '@styles/home.module.css';
 import { useState } from 'react';
 import { StatusMessage } from '@types';
+import { t } from 'i18next';
 
 const Home: React.FC = () => {
     const router = useRouter();
-
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState<String | null>(null);
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
@@ -35,6 +37,20 @@ const Home: React.FC = () => {
         clearErrors();
         if (!validate()) {
             return;
+        }
+
+        const user = { username, password };
+        const response = await UserService.loginUser(user);
+
+        if (response.status === 200) {
+            setStatusMessages([{ message: t('login success'), type: 'success' }]);
+
+            const user = await response.json();
+            localStorage.setItem(
+                'loggedInUser',
+                JSON.stringify({ token: user.token, username: user.username, role: user.role })
+            );
+            localStorage.setItem('token', user.token);
         }
 
         sessionStorage.setItem('loggedInUser', email);
@@ -134,7 +150,7 @@ const Home: React.FC = () => {
                         </Button>
                         <Typography variant="body2" align="center">
                             Don’t have an account?
-                            <Link href="/registration/signup" variant="body2">
+                            <Link href="/user/registration" variant="body2">
                                 Sign up
                             </Link>
                         </Typography>
