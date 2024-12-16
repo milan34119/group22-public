@@ -9,7 +9,7 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
         useEffect(() => {
             const token = localStorage.getItem('token');
             if (!token) {
-                router.push('/user/login');
+                router.push('/');
             } else {
                 setIsLoading(false);
             }

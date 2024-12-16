@@ -1,15 +1,16 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { Container, Box, Typography, TextField, Button, Link, Alert } from '@mui/material';
 import UserService from 'service/UserService';
-import styles from '@styles/home.module.css';
-import { useState } from 'react';
+import React, { ReactComponentElement, useState } from 'react';
+import router, { useRouter } from 'next/router';
+import { Alert, Box, Button, Container, Link, TextField, Typography } from '@mui/material';
 import { StatusMessage } from '@types';
 import { t } from 'i18next';
 
-const Home: React.FC = () => {
+const UserSignupForm: React.FC = () => {
     const router = useRouter();
+    const [name, setName] = useState('');
     const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const [usernameError, setUsernameError] = useState<String | null>(null);
@@ -20,34 +21,18 @@ const Home: React.FC = () => {
         setStatusMessages([]);
     };
 
-    const validate = (): boolean => {
-        let result = true;
-
-        if (!username || username.trim() === '') {
-            setUsernameError('Name cannot be empty.');
-            result = false;
-        }
-
-        return result;
-    };
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         clearErrors();
-        if (!validate()) {
-            return;
-        }
 
-        const user = { username, password };
-        const response = await UserService.loginUser(user);
+        const user = { name, email, username, password };
+        const response = await UserService.addUser(user);
         
         if (response.status === 200) {
             setStatusMessages([{ message: t('login success'), type: 'success' }]);
 
             const user = await response.json();
-
-            console.log(user)
 
             localStorage.setItem('token', user.token);
             localStorage.setItem('loggedInUser', user.username);
@@ -56,25 +41,33 @@ const Home: React.FC = () => {
                 ...statusMessages,
                 {
                     type: 'success',
-                    message: 'Login successful. Redirecting to homepage...',
+                    message: 'Signup successful. Redirecting to homepage...',
                 },
             ]);
 
             setTimeout(() => router.push('/'), 800);
         
         }
+        else {
+            setStatusMessages([
+                ...statusMessages,
+                {
+                    type: 'error',
+                    message: 'Oops, something went wrong.',
+                },
+            ]);
+        }
     };
 
     return (
         <>
             <Head>
-                <title>Login - TravelBlog</title>
+                <title>Register for TravelBlog</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
 
             <Container component="main" maxWidth="xs">
                 <Box
-                    className={styles.form_container}
                     sx={{
                         marginTop: 8,
                         display: 'flex',
@@ -86,7 +79,7 @@ const Home: React.FC = () => {
                     }}
                 >
                     <Typography component="h1" variant="h5">
-                        Login to TravelBlog
+                        Sign up to TravelBlog
                     </Typography>
 
                     <Box sx={{ width: '100%', mb: 2 }}>
@@ -97,6 +90,7 @@ const Home: React.FC = () => {
                                 </Alert>
                             ))}
                     </Box>
+
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
@@ -107,9 +101,36 @@ const Home: React.FC = () => {
                             name="username"
                             autoComplete="username"
                             autoFocus
-                            type="text"
+                            type='text'
                             onChange={(e) => {
                                 setUsername(e.target.value);
+                            }}
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="name"
+                            label="Name"
+                            name="name"
+                            autoComplete="name"
+                            autoFocus
+                            type='text'
+                            onChange={(e) => {
+                                setName(e.target.value);
+                            }}
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Email Address"
+                            name="email"
+                            type="email"
+                            autoComplete="email"
+                            onChange={(e) => {
+                                setEmail(e.target.value);
                             }}
                         />
                         <TextField
@@ -132,17 +153,12 @@ const Home: React.FC = () => {
                             color="primary"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            Log in
+                            Sign up
                         </Button>
                         <Typography variant="body2" align="center">
-                            Don’t have an account?
-                            <Link href="/user/registration" variant="body2">
-                                Sign up
-                            </Link>
-                        </Typography>
-                        <Typography variant="body2" align="center">
-                            <Link href="/" variant="body2">
-                                continue as Guest
+                            Already have an account?
+                            <Link href="/user/login" variant="body2">
+                                Log in
                             </Link>
                         </Typography>
                     </Box>
@@ -152,4 +168,4 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
+export default UserSignupForm;

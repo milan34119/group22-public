@@ -5,6 +5,7 @@ import userDb from '../repository/user.db';
 import { AuthenticationResponse, UserInput } from '../types';
 import bcrypt from 'bcrypt';
 import { generateJwtToken } from '../util/jwt';
+import { nextDay } from 'date-fns';
 const getAllUsers = async (): Promise<User[]> => await userDb.getAllUsers();
 
 const getUserById = async (id: number): Promise<User> => {
@@ -45,14 +46,13 @@ const authenticate = async ({ username, password }: UserInput): Promise<Authenti
     if (!isValidPassword) {
         throw new Error('fout wachtwoord');
     }
-
     return {
-        token: generateJwtToken({ username }),
+        token: generateJwtToken({ username, role: user.role }),
         username,
         name: user.name,
     };
 };
-const createUser = async ({ name, username, email, password, role }: UserInput): Promise<User> => {
+const createUser = async ({ name, username, email, password, role }: UserInput): Promise<AuthenticationResponse> => {
     const existingUser = await userDb.getUserByEmailAndUsername({ email, username });
     if (existingUser) {
         throw new Error('A user with this email/username already exists.');
@@ -69,19 +69,20 @@ const createUser = async ({ name, username, email, password, role }: UserInput):
         posts: [],
         planners: [],
     });
-    return await userDb.addUser(user);
+    const createdUser = await userDb.addUser(user);
+    if(!createdUser) throw new Error("error when creating a new user")
+    
+    return authenticate({username, password, email, name, role}) 
 };
 
-const login = async ({ email, password }: { email: string; password: string }): Promise<User> => {
-    const user = await userDb.getUserByEmailAndPassword({ email, password });
-    if (!user) throw new Error('No user with that email and password exists');
-    return user;
-};
+const deleteUser = async (id:number): Promise<User> => {
+    return await userDb.deleteUser(id)
+}
 
 export default {
     getAllUsers,
     getUserById,
     createUser,
-    login,
     authenticate,
+    deleteUser,
 };

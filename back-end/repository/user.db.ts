@@ -108,6 +108,23 @@ const getUserByUsername = async ({ username }): Promise<User | null> => {
     }
 };
 
+const deleteUser = async (id:number): Promise<User> => {
+    try {
+        const prismaUser = await database.user.delete({
+            where : {
+                id
+            },
+            include: {
+                planners: { include: { activities: { include: { location: true } } } },
+                posts: { include: { activity: { include: { location: true } } } },
+            },
+        })
+        return prismaUser ? User.from(prismaUser): null;
+    } catch (error) {
+        throw new Error("database error when deleting user")
+    }
+}
+
 export default {
     getAllUsers,
     getUserById,
@@ -115,4 +132,5 @@ export default {
     getUserByEmailAndPassword,
     getUserByEmailAndUsername,
     getUserByUsername,
+    deleteUser,
 };

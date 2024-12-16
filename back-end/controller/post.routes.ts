@@ -3,7 +3,7 @@ import PostService from '../service/Post.service';
 
 const postRouter = express.Router();
 
-postRouter.get('/', async (req:Request & {auth: any}, res: Response) => {
+postRouter.get('/', async (req:Request, res: Response) => {
     try {
         const response = await PostService.getAllPosts()
 

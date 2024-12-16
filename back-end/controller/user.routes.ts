@@ -28,8 +28,9 @@ const userRouter = express.Router();
  *         description: Internal server error.
  */
 
-userRouter.get('/', async (req: Request, res: Response) => {
+userRouter.get('/', async (req: Request & {auth: any}, res: Response) => {
     try {
+        if (req.auth.role != "admin") throw new Error("logged in user must be an admin")
         const allUsers = await UserService.getAllUsers();
         res.status(200).json(allUsers);
     } catch (error) {
@@ -186,9 +187,9 @@ userRouter.post('/:id/post', async (req: Request, res: Response, next: NextFunct
 
 userRouter.post('/registration', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = <UserInput>req.body;
-        const result = await UserService.createUser(user);
-        res.status(200).json(result);
+        const userInput = <UserInput>req.body;
+        const result = await UserService.createUser(userInput);
+        res.status(200).json({ message: 'Auth succesful', ...result });
     } catch (error) {
         next(error);
     }
@@ -211,6 +212,19 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
         res.status(200).json({ message: 'Auth succesful', ...response });
     } catch (error) {
         next(error);
+    }
+});
+
+userRouter.delete('/:id', async (req: Request & {auth: any}, res: Response) => {
+    try {
+        console.log(req.auth)
+        if (req.auth.role != "admin") throw new Error("logged in user must be an admin")
+        const id = Number(req.params.id)
+        const response  = await UserService.deleteUser(id);
+        res.status(200).json(response);
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ error: 'An error occurred while deleting a user' });
     }
 });
 

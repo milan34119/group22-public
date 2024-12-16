@@ -1,8 +1,10 @@
 const getAllUsers = async () => {
+    const token = localStorage.getItem('token');
     return await fetch(process.env.NEXT_PUBLIC_API_URL + '/user', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
         },
     });
 };
@@ -35,8 +37,8 @@ const getAllUserActivitiesById = async (id: number) => {
     });
 };
 
-const addUser = async (content: { name: string; email: string; password: string }) => {
-    return await fetch(process.env.NEXT_PUBLIC_API_URL + '/user', {
+const addUser = async (content: { name: string; email: string; password: string, username: string }) => {
+    return await fetch(process.env.NEXT_PUBLIC_API_URL + '/user/registration', {
         method: 'POST',
         body: JSON.stringify(content),
         headers: {
@@ -44,12 +46,28 @@ const addUser = async (content: { name: string; email: string; password: string 
         },
     });
 };
+
+const deleteUser = async (id:number) => {
+    console.log(id)
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/user/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return response;
+}
+
 const UserService = {
     getAllUsers,
     getUserById,
     loginUser,
     getAllUserActivitiesById,
     addUser,
+    deleteUser,
 };
 
 export default UserService;

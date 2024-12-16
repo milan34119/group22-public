@@ -8,31 +8,31 @@ datasource db {
 }
 
 model User{
-    id Int @id @default(autoincrement())
-    name String 
-    username String @unique
-    email String @unique
-    password String
-    role String @default("user")
+  id Int @id @default(autoincrement())
+  name String 
+  username String @unique
+  email String @unique
+  password String
+  role String @default("user")
 
-    //relationships
-    posts Post[]
-    planners Planner[]
+  //relationships
+  posts Post[]
+  planners Planner[]
 }
 
 model Post{
-    id Int @id @default(autoincrement())
-    name String
-    description String?
-    comments String[]
-    createdAt DateTime @default(now())
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+  comments String[]
+  createdAt DateTime @default(now())
 
 
-    //relationships
-    user User @relation(fields: [userId], references: [id])
-    userId Int
-    activity Activity @relation(fields: [activityId], references: [id])
-    activityId Int
+  //relationships
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  activity Activity @relation(fields: [activityId], references: [id])
+  activityId Int
 }
 
 model Planner{
@@ -42,7 +42,7 @@ model Planner{
 
   //relationships
   activities Activity[]
-  User User @relation(fields: [userId], references: [id])
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 }
 
