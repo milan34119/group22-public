@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { AppBar, Toolbar, Typography, Box, Button, IconButton } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
@@ -10,29 +12,33 @@ type DecodedToken = {
 
 const Header: React.FC = () => {
     const router = useRouter();
-    const [userName, setUsername] = useState('')
-    const [role, setRole] = useState("guest")
+    const [userName, setUsername] = useState('');
+    const [role, setRole] = useState('guest');
 
     useEffect(() => {
-        const username = localStorage.getItem("loggedInUser");
-        setUsername(username?username:"")
+        const username = localStorage.getItem('loggedInUser');
+        setUsername(username ? username : '');
     }, []);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (!token) setRole("guest");
+        if (!token) setRole('guest');
         else {
             const decodedToken = jwtDecode<DecodedToken>(token);
-            setRole(decodedToken.role?decodedToken.role:"guest")
+            setRole(decodedToken.role ? decodedToken.role : 'guest');
         }
-        
     }, []);
 
-
     const handleLogout = () => {
-        localStorage.setItem('loggedInUser', "");
+        localStorage.setItem('loggedInUser', '');
         localStorage.removeItem('token');
-        router.refresh()
+        router.refresh();
+    };
+
+    const handleMyPostsClick = () => {
+        if (userName) {
+            router.push(`/user/${userName}`);
+        }
     };
 
     return (
@@ -57,19 +63,27 @@ const Header: React.FC = () => {
                             </Button>
                         </Link>
                     )}
-                    {(role == "admin" || role == "user") && (
-                        <Link href="/" passHref>
-                            <Button color="inherit">My posts</Button>
-                        </Link>
+                    {(role == 'admin' || role == 'user') && (
+                        <Button color="inherit" onClick={handleMyPostsClick}>
+                            My posts
+                        </Button>
                     )}
-                    {role == "admin" && (
+                    {role == 'admin' && (
                         <Link href="/admin" passHref>
                             <Button color="inherit">ADMIN</Button>
                         </Link>
                     )}
-                    
-                    
                 </Box>
+                {/* {(role == 'admin' || role == 'user') && (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
+                        <Link href="/create-post" passHref>
+                            <IconButton color="inherit" component="a">
+                                <AddIcon />
+                            </IconButton>
+                        </Link>
+                    </Box>
+                )} */}
+
                 {userName && (
                     <Typography variant="body1" sx={{ marginRight: 2 }}>
                         Welcome, {userName}!

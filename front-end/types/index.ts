@@ -14,7 +14,7 @@ export type Post = {
     name: string;
     description?: string;
     comments: string[];
-    date: Date;
+    createdAt?: Date;
     activity: Activity;
 };
 
@@ -22,23 +22,21 @@ export type Location = {
     id?: number;
     name: string;
     description?: string;
-}
+};
 
 export type Activity = {
     id?: number;
     name: string;
     description?: string;
     location: Location;
-}
+};
 
 export type Planner = {
     id?: number;
     name: string;
     description?: string;
-    activities: Activity[]
-}
-
-
+    activities: Activity[];
+};
 
 export type StatusMessage = {
     message: string;

@@ -28,9 +28,9 @@ const userRouter = express.Router();
  *         description: Internal server error.
  */
 
-userRouter.get('/', async (req: Request & {auth: any}, res: Response) => {
+userRouter.get('/', async (req: Request & { auth: any }, res: Response) => {
     try {
-        if (req.auth.role != "admin") throw new Error("logged in user must be an admin")
+        if (req.auth.role != 'admin') throw new Error('logged in user must be an admin');
         const allUsers = await UserService.getAllUsers();
         res.status(200).json(allUsers);
     } catch (error) {
@@ -67,6 +67,25 @@ userRouter.get('/', async (req: Request & {auth: any}, res: Response) => {
 userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await UserService.getUserById(Number(req.params.id));
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+userRouter.get('/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const username = req.params.username;
+        const user = await UserService.getUserByUsername;
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+userRouter.get('/:username/activities', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await UserService.getAllUserActivitiesByUsername(String(req.params.username));
         res.status(200).json(user);
     } catch (error) {
         next(error);
@@ -215,12 +234,12 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
-userRouter.delete('/:id', async (req: Request & {auth: any}, res: Response) => {
+userRouter.delete('/:id', async (req: Request & { auth: any }, res: Response) => {
     try {
-        console.log(req.auth)
-        if (req.auth.role != "admin") throw new Error("logged in user must be an admin")
-        const id = Number(req.params.id)
-        const response  = await UserService.deleteUser(id);
+        console.log(req.auth);
+        if (req.auth.role != 'admin') throw new Error('logged in user must be an admin');
+        const id = Number(req.params.id);
+        const response = await UserService.deleteUser(id);
         res.status(200).json(response);
     } catch (error) {
         console.error(error);

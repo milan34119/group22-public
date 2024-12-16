@@ -4,7 +4,7 @@ const getAllUsers = async () => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
         },
     });
 };
@@ -14,6 +14,20 @@ const getUserById = async (id: number) => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+        },
+    });
+};
+
+const getUserByUsername = async (username: string) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error('No token found');
+    }
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/user/${username}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
         },
     });
 };
@@ -37,7 +51,21 @@ const getAllUserActivitiesById = async (id: number) => {
     });
 };
 
-const addUser = async (content: { name: string; email: string; password: string, username: string }) => {
+const getAllUserActivitiesByUsername = async (username: string) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/user/${username}/activities`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+};
+
+const addUser = async (content: {
+    name: string;
+    email: string;
+    password: string;
+    username: string;
+}) => {
     return await fetch(process.env.NEXT_PUBLIC_API_URL + '/user/registration', {
         method: 'POST',
         body: JSON.stringify(content),
@@ -47,8 +75,8 @@ const addUser = async (content: { name: string; email: string; password: string,
     });
 };
 
-const deleteUser = async (id:number) => {
-    console.log(id)
+const deleteUser = async (id: number) => {
+    console.log(id);
     const token = localStorage.getItem('token');
 
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/user/${id}`, {
@@ -59,15 +87,17 @@ const deleteUser = async (id:number) => {
         },
     });
     return response;
-}
+};
 
 const UserService = {
     getAllUsers,
     getUserById,
+    getUserByUsername,
     loginUser,
     getAllUserActivitiesById,
     addUser,
     deleteUser,
+    getAllUserActivitiesByUsername,
 };
 
 export default UserService;

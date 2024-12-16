@@ -108,22 +108,45 @@ const getUserByUsername = async ({ username }): Promise<User | null> => {
     }
 };
 
-const deleteUser = async (id:number): Promise<User> => {
+const getAllUserPostsByUsername = async (username: string): Promise<Post[]> => {
+    try {
+        const prismaPosts = await database.post.findMany({
+            where: {
+                user: {
+                    username,
+                },
+            },
+            include: {
+                activity: {
+                    include: {
+                        location: true,
+                    },
+                },
+            },
+        });
+
+        return prismaPosts ? prismaPosts.map((post) => Post.from(post)) : [];
+    } catch (error) {
+        throw new Error('Database error when retrieving posts for user');
+    }
+};
+
+const deleteUser = async (id: number): Promise<User> => {
     try {
         const prismaUser = await database.user.delete({
-            where : {
-                id
+            where: {
+                id,
             },
             include: {
                 planners: { include: { activities: { include: { location: true } } } },
                 posts: { include: { activity: { include: { location: true } } } },
             },
-        })
-        return prismaUser ? User.from(prismaUser): null;
+        });
+        return prismaUser ? User.from(prismaUser) : null;
     } catch (error) {
-        throw new Error("database error when deleting user")
+        throw new Error('database error when deleting user');
     }
-}
+};
 
 export default {
     getAllUsers,
@@ -133,4 +156,5 @@ export default {
     getUserByEmailAndUsername,
     getUserByUsername,
     deleteUser,
+    getAllUserPostsByUsername,
 };

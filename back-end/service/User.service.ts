@@ -22,6 +22,10 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
     return user;
 };
 
+const getAllUserActivitiesByUsername = async (username: string): Promise<Post[]> => {
+    return userDb.getAllUserPostsByUsername(username);
+};
+
 // const getAllUserActivitiesById = async (id: number): Promise<Post[]> => {
 //     return userDb.getAllUserPostsById({ id });
 // };
@@ -52,7 +56,13 @@ const authenticate = async ({ username, password }: UserInput): Promise<Authenti
         name: user.name,
     };
 };
-const createUser = async ({ name, username, email, password, role }: UserInput): Promise<AuthenticationResponse> => {
+const createUser = async ({
+    name,
+    username,
+    email,
+    password,
+    role,
+}: UserInput): Promise<AuthenticationResponse> => {
     const existingUser = await userDb.getUserByEmailAndUsername({ email, username });
     if (existingUser) {
         throw new Error('A user with this email/username already exists.');
@@ -70,14 +80,14 @@ const createUser = async ({ name, username, email, password, role }: UserInput):
         planners: [],
     });
     const createdUser = await userDb.addUser(user);
-    if(!createdUser) throw new Error("error when creating a new user")
-    
-    return authenticate({username, password, email, name, role}) 
+    if (!createdUser) throw new Error('error when creating a new user');
+
+    return authenticate({ username, password, email, name, role });
 };
 
-const deleteUser = async (id:number): Promise<User> => {
-    return await userDb.deleteUser(id)
-}
+const deleteUser = async (id: number): Promise<User> => {
+    return await userDb.deleteUser(id);
+};
 
 export default {
     getAllUsers,
@@ -85,4 +95,6 @@ export default {
     createUser,
     authenticate,
     deleteUser,
+    getUserByUsername,
+    getAllUserActivitiesByUsername,
 };
