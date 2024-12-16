@@ -37,7 +37,7 @@ const Header: React.FC = () => {
 
     const handleMyPostsClick = () => {
         if (userName) {
-            router.push(`/user/${userName}`);
+            router.push(`/user/posts/${userName}`);
         }
     };
 
@@ -67,6 +67,13 @@ const Header: React.FC = () => {
                         <Button color="inherit" onClick={handleMyPostsClick}>
                             My posts
                         </Button>
+                    )}
+                    {(role == 'admin' || role == 'user') && (
+                        <Link href={`/user/planners/${userName}`}>
+                            <Button color="inherit" onClick={handleMyPostsClick}>
+                                My planners
+                            </Button>
+                        </Link>
                     )}
                     {role == 'admin' && (
                         <Link href="/admin" passHref>

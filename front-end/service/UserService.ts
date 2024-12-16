@@ -23,7 +23,7 @@ const getUserByUsername = async (username: string) => {
     if (!token) {
         throw new Error('No token found');
     }
-    return fetch(process.env.NEXT_PUBLIC_API_URL + `/user/${username}`, {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/user/username/${username}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
