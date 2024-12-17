@@ -13,49 +13,71 @@ const UserSignupForm: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const [usernameError, setUsernameError] = useState<String | null>(null);
-    const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+    const [nameError, setNameError] = useState('');
+    const [usernameError, setUsernameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
 
     const clearErrors = () => {
-        setUsernameError(null);
-        setStatusMessages([]);
-    };
+        setNameError("");
+        setUsernameError("");
+        setEmailError("");
+        setPasswordError("");
+    }
+
+    const addError = (messages: StatusMessage[], error:string) => {
+        return [
+            ...messages,
+            {
+                type: 'error',
+                message: error,
+            },
+        ]
+    }
+
+    const validate = ({name, username, email, password}: {name:string, username: string, email:string, password:string}) => {
+        let isValid = true
+        if (!name || name.trim() == "") {
+            setNameError("Name is required");
+            isValid = false
+        }
+
+        if (!username || username.trim() == "") {
+            setUsernameError("Username is required");
+            isValid = false
+        }
+
+        if (!email || email.trim() == "") {
+            setEmailError('Email is required');
+            isValid = false
+        }
+
+        else if (!password || password.trim() == "") {
+            setPasswordError('Password is required');
+            isValid = false
+        }
+
+        return isValid;        
+    }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        clearErrors();
+        clearErrors()
+
+        if(!validate({name, username, email, password})) return;
+
 
         const user = { name, email, username, password };
         const response = await UserService.addUser(user);
         
         if (response.status === 200) {
-            setStatusMessages([{ message: t('login success'), type: 'success' }]);
-
             const user = await response.json();
 
             localStorage.setItem('token', user.token);
             localStorage.setItem('loggedInUser', user.username);
 
-            setStatusMessages([
-                ...statusMessages,
-                {
-                    type: 'success',
-                    message: 'Signup successful. Redirecting to homepage...',
-                },
-            ]);
-
-            setTimeout(() => router.push('/'), 800);
-        
-        }
-        else {
-            setStatusMessages([
-                ...statusMessages,
-                {
-                    type: 'error',
-                    message: 'Oops, something went wrong.',
-                },
-            ]);
+            router.push('/')
         }
     };
 
@@ -82,15 +104,6 @@ const UserSignupForm: React.FC = () => {
                         Sign up to TravelBlog
                     </Typography>
 
-                    <Box sx={{ width: '100%', mb: 2 }}>
-                        {statusMessages.length > 0 &&
-                            statusMessages.map((status, index) => (
-                                <Alert key={index} severity={status.type} sx={{ mb: 1 }}>
-                                    {status.message}
-                                </Alert>
-                            ))}
-                    </Box>
-
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
@@ -106,6 +119,7 @@ const UserSignupForm: React.FC = () => {
                                 setUsername(e.target.value);
                             }}
                         />
+                        {usernameError && <Typography color='warning'>{usernameError}</Typography>}
                         <TextField
                             margin="normal"
                             required
@@ -120,6 +134,7 @@ const UserSignupForm: React.FC = () => {
                                 setName(e.target.value);
                             }}
                         />
+                        {nameError && <Typography color='warning'>{nameError}</Typography>}
                         <TextField
                             margin="normal"
                             required
@@ -133,6 +148,7 @@ const UserSignupForm: React.FC = () => {
                                 setEmail(e.target.value);
                             }}
                         />
+                        {emailError && <Typography color='warning'>{emailError}</Typography>}
                         <TextField
                             margin="normal"
                             required
@@ -146,6 +162,7 @@ const UserSignupForm: React.FC = () => {
                                 setPassword(e.target.value);
                             }}
                         />
+                        {passwordError && <Typography color='warning'>{passwordError}</Typography>}
                         <Button
                             type="submit"
                             fullWidth
@@ -159,6 +176,11 @@ const UserSignupForm: React.FC = () => {
                             Already have an account?
                             <Link href="/user/login" variant="body2">
                                 Log in
+                            </Link>
+                        </Typography>
+                        <Typography variant="body2" align="center">
+                            <Link href="/" variant="body2">
+                                continue as Guest
                             </Link>
                         </Typography>
                     </Box>

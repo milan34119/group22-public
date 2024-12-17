@@ -6,18 +6,19 @@ import styles from '@styles/home.module.css';
 import { useState } from 'react';
 import { StatusMessage } from '@types';
 import { t } from 'i18next';
+import { setEngine } from 'crypto';
 
 const Home: React.FC = () => {
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const [usernameError, setUsernameError] = useState<String | null>(null);
-    const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+    const [usernameError, setUsernameError] = useState("");
+    const [passwordError, setPasswordError] = useState("")
 
     const clearErrors = () => {
-        setUsernameError(null);
-        setStatusMessages([]);
+        setUsernameError("");
+        setPasswordError("")
     };
 
     const validate = (): boolean => {
@@ -28,6 +29,11 @@ const Home: React.FC = () => {
             result = false;
         }
 
+        if (!password || password.trim() === '') {
+            setPasswordError('Password cannot be empty.');
+            result = false;
+        }
+
         return result;
     };
 
@@ -35,6 +41,7 @@ const Home: React.FC = () => {
         e.preventDefault();
 
         clearErrors();
+
         if (!validate()) {
             return;
         }
@@ -43,8 +50,6 @@ const Home: React.FC = () => {
         const response = await UserService.loginUser(user);
 
         if (response.status === 200) {
-            setStatusMessages([{ message: t('login success'), type: 'success' }]);
-
             const user = await response.json();
 
             console.log(user);
@@ -52,15 +57,10 @@ const Home: React.FC = () => {
             localStorage.setItem('token', user.token);
             localStorage.setItem('loggedInUser', user.username);
 
-            setStatusMessages([
-                ...statusMessages,
-                {
-                    type: 'success',
-                    message: 'Login successful. Redirecting to homepage...',
-                },
-            ]);
-
-            setTimeout(() => router.push('/'), 800);
+            router.push('/')
+        }
+        else{
+            setPasswordError("Password or username incorrect")
         }
     };
 
@@ -88,14 +88,6 @@ const Home: React.FC = () => {
                         Login to TravelBlog
                     </Typography>
 
-                    <Box sx={{ width: '100%', mb: 2 }}>
-                        {statusMessages.length > 0 &&
-                            statusMessages.map((status, index) => (
-                                <Alert key={index} severity={status.type} sx={{ mb: 1 }}>
-                                    {status.message}
-                                </Alert>
-                            ))}
-                    </Box>
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
@@ -111,6 +103,7 @@ const Home: React.FC = () => {
                                 setUsername(e.target.value);
                             }}
                         />
+                        {usernameError && <Typography color='warning'>{usernameError}</Typography>}
                         <TextField
                             margin="normal"
                             required
@@ -124,6 +117,7 @@ const Home: React.FC = () => {
                                 setPassword(e.target.value);
                             }}
                         />
+                        {passwordError && <Typography color='warning'>{passwordError}</Typography>}
                         <Button
                             type="submit"
                             fullWidth
