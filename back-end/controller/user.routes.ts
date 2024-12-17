@@ -39,10 +39,6 @@ userRouter.get('/', async (req: Request & { auth: any }, res: Response) => {
     }
 });
 
-userRouter.patch('/', async (req: Request & { auth: any }, res: Response) => {
-
-});
-
 /**
  * @swagger
  * /user/{id}:
@@ -240,7 +236,6 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
 
 userRouter.delete('/:id', async (req: Request & { auth: any }, res: Response) => {
     try {
-        console.log(req.auth);
         if (req.auth.role != 'admin') throw new Error('logged in user must be an admin');
         const id = Number(req.params.id);
         const response = await UserService.deleteUser(id);
