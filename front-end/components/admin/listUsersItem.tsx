@@ -65,13 +65,13 @@ const ListUserItem: React.FC<Props> = ({ user, deleteUser }: Props) => {
                 </Typography>
             </CardContent>
 
-            <IconButton
+            {user.username != localStorage.getItem('loggedInUser') && <IconButton
                 sx={{ position: 'absolute', top: 8, right: 8 }}
                 color="error"
                 onClick={() => user.id && deleteUser(user.id)}
             >
                 <FaCircleXmark />
-            </IconButton>
+            </IconButton>}
         </Card>
     );
 };

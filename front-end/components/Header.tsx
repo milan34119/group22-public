@@ -64,14 +64,9 @@ const Header: React.FC = () => {
                         </Link>
                     )}
                     {(role == 'admin' || role == 'user') && (
-                        <Button sx={{ color: 'white' }} onClick={handleMyPostsClick}>
-                            My posts
-                        </Button>
-                    )}
-                    {(role == 'admin' || role == 'user') && (
-                        <Link href={`/user/planners/${userName}`}>
-                            <Button sx={{ color: 'white' }} onClick={handleMyPostsClick}>
-                                My planners
+                        <Link href={`/user/${userName}`} passHref>
+                            <Button sx={{ color: 'white' }}>
+                                My profile
                             </Button>
                         </Link>
                     )}

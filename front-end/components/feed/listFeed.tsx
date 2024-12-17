@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Post } from "@types";
 import postService from "service/PostService";
 import { error } from "console";
-import FeedItem from "./feedItem";
+import DisplayPost from "@components/posts/Post";
+import Grid from "@mui/material/Grid2";
+import { Paper } from "@mui/material";
 
 const ListFeed: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -26,10 +28,18 @@ const ListFeed: React.FC = () => {
 
     return (
         <>
-
+        <p></p>
         <div>
             {isLoading ? (<p>Loading...</p>):(
-                posts.map((post) => (<FeedItem key={post.id} post={post}/>))
+                <Grid container spacing={2} padding={2}>
+                    {posts.map((post) => (
+                    <Grid size={6}>    
+                        <Paper elevation={3} sx={{p: 3 }}>
+                            <DisplayPost key={post.id} post={post}/>
+                        </Paper>
+                    </Grid>
+                    ))}
+                </Grid>                
             )}
         </div>
         </>

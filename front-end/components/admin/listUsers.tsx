@@ -72,6 +72,8 @@ const UserList: React.FC = () => {
     };
 
     return (
+        <>
+        <p></p>
         <Grid container spacing={2}>
             {isLoading ? (
                 <Grid item xs={12} container justifyContent="center">
@@ -85,6 +87,7 @@ const UserList: React.FC = () => {
                 ))
             )}
         </Grid>
+        </>
     );
 };
 
