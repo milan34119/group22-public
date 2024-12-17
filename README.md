@@ -61,3 +61,5 @@
 44) **Indien de username of het password niet voldoet aan je validatieregels dan verander je dat in de tabel.**
 45) **Je kan minstens 3 pagina's van je project in minstens 2 talen/locales tonen.**
 46) **Je kan op een gebruiksvriendelijke manier de taal switchen op elk van minstens deze 3 pagina's**
+47) **Minimum 2 componenten zijn getest met React Testing Library.**
+48) **Je HTTP verkeer wordt beveiligd door middel van Helmet**
