@@ -41,13 +41,13 @@ const Home: React.FC = () => {
 
         const user = { username, password };
         const response = await UserService.loginUser(user);
-        
+
         if (response.status === 200) {
             setStatusMessages([{ message: t('login success'), type: 'success' }]);
 
             const user = await response.json();
 
-            console.log(user)
+            console.log(user);
 
             localStorage.setItem('token', user.token);
             localStorage.setItem('loggedInUser', user.username);
@@ -61,7 +61,6 @@ const Home: React.FC = () => {
             ]);
 
             setTimeout(() => router.push('/'), 800);
-        
         }
     };
 
