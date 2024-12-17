@@ -46,38 +46,38 @@ const Header: React.FC = () => {
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex' }}>
                     <Link href="/" passHref>
-                        <Button color="inherit">Home</Button>
+                        <Button sx={{ color: 'white' }}>Home</Button>
                     </Link>
                     <Link href="/feed" passHref>
-                        <Button color="inherit">Feed</Button>
+                        <Button sx={{ color: 'white' }}>Feed</Button>
                     </Link>
                     {!userName && (
                         <Link href="/user/login" passHref>
-                            <Button color="inherit">Login</Button>
+                            <Button sx={{ color: 'white' }}>Login</Button>
                         </Link>
                     )}
                     {userName && (
                         <Link href="/" passHref>
-                            <Button color="inherit" onClick={handleLogout}>
+                            <Button sx={{ color: 'white' }} onClick={handleLogout}>
                                 Logout
                             </Button>
                         </Link>
                     )}
                     {(role == 'admin' || role == 'user') && (
-                        <Button color="inherit" onClick={handleMyPostsClick}>
+                        <Button sx={{ color: 'white' }} onClick={handleMyPostsClick}>
                             My posts
                         </Button>
                     )}
                     {(role == 'admin' || role == 'user') && (
                         <Link href={`/user/planners/${userName}`}>
-                            <Button color="inherit" onClick={handleMyPostsClick}>
+                            <Button sx={{ color: 'white' }} onClick={handleMyPostsClick}>
                                 My planners
                             </Button>
                         </Link>
                     )}
                     {role == 'admin' && (
                         <Link href="/admin" passHref>
-                            <Button color="inherit">ADMIN</Button>
+                            <Button sx={{ color: 'red' }}>ADMIN</Button>
                         </Link>
                     )}
                 </Box>
