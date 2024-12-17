@@ -39,6 +39,10 @@ userRouter.get('/', async (req: Request & { auth: any }, res: Response) => {
     }
 });
 
+userRouter.patch('/', async (req: Request & { auth: any }, res: Response) => {
+
+});
+
 /**
  * @swagger
  * /user/{id}:
