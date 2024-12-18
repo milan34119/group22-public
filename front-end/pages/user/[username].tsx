@@ -59,7 +59,7 @@ const UserProfile = () => {
                 {posts.map((post) => (
                 <Grid size={6}>    
                     <Paper elevation={3} sx={{p: 3 }}>
-                        <DisplayPost key={post.id} post={post}/>
+                        <DisplayPost key={post.id} post={post} displayIcons={false}/>
                     </Paper>
                 </Grid>
                 ))}
@@ -70,7 +70,7 @@ const UserProfile = () => {
                 {planners.map((planner) => (
                 <Grid size={6}>    
                     <Paper elevation={3} sx={{p: 3 }}>
-                        <DisplayPlanner key={planner.id} planner={planner}/>
+                        <DisplayPlanner key={planner.id} planner={planner} displayIcons={false}/>
                     </Paper>
                 </Grid>
                 ))}

@@ -6,10 +6,10 @@ import { FaCircleCheck, FaCirclePlus, FaCircleXmark } from 'react-icons/fa6';
 
 type Props = {
     activity: Activity
-    displayPlus?: boolean
+    displayIcons?: boolean
 };
 
-const DisplayActivity: React.FC<Props> = ({ activity, displayPlus=true }: Props) => {
+const DisplayActivity: React.FC<Props> = ({ activity, displayIcons=true }: Props) => {
     const router = useRouter();
     return (
         <Container>
@@ -19,7 +19,7 @@ const DisplayActivity: React.FC<Props> = ({ activity, displayPlus=true }: Props)
                     <Grid size={10}>
                         <Typography  variant='h5'>{activity.name}</Typography>
                     </Grid>
-                    {displayPlus && 
+                    {displayIcons && 
                     <>
                     <Grid size={1}>
                         <Tooltip title="Add this activity to a Planner">

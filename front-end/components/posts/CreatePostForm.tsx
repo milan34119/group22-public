@@ -132,7 +132,7 @@ const CreatePostForm: React.FC<Props> = ({activity}:Props) => {
 
                     {activity &&
                     <Box padding={2}>
-                    <DisplayActivity activity={activity} displayPlus={false}/>
+                    <DisplayActivity activity={activity} displayIcons={false}/>
                     </Box>
                     }
 

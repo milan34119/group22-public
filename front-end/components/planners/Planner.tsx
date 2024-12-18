@@ -5,9 +5,10 @@ import { FaCirclePlus } from 'react-icons/fa6';
 
 type Props = {
     planner: Planner
+    displayIcons?: boolean
 };
 
-const DisplayPlanner: React.FC<Props> = ({ planner }: Props) => {
+const DisplayPlanner: React.FC<Props> = ({ planner, displayIcons=true }: Props) => {
     return (
         <Container>
             <Stack>
@@ -15,7 +16,7 @@ const DisplayPlanner: React.FC<Props> = ({ planner }: Props) => {
                 {planner.description && <Typography variant='body1'>{planner.description}</Typography>}
 
                 <Stack>
-                    {planner.activities.map(activity => <DisplayActivity activity={activity}/>)}
+                    {planner.activities.map(activity => <DisplayActivity activity={activity} displayIcons={displayIcons}/>)}
                 </Stack>
             </Stack>
         </Container>
