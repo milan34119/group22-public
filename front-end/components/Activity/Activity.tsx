@@ -49,6 +49,7 @@ const DisplayActivity: React.FC<Props> = ({ activity, displayIcons=true }: Props
                 </Grid>
                 <Typography color='info' variant='subtitle2'>{activity.location.name}</Typography>
                 {activity.description && <Typography variant='body1'>{activity.description}</Typography>}
+                {!activity.description && <Typography variant='body1' color='white'>-</Typography>}
             </Stack>
         </Paper>
         </Container>

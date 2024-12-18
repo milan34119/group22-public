@@ -37,7 +37,8 @@ const DisplayPost: React.FC<Props> = ({ post, displayIcons=true}: Props) => {
         const response = await postService.addCommentToPost({comment: fullComment}, post.id);
 
         if (response.status === 200) {
-        setAllcomments([...allcomments, fullComment])
+            if (allcomments.length < 3) {setAllcomments([fullComment, ...allcomments])}
+            else {setAllcomments([fullComment, allcomments[0], allcomments[1]])}
         setComment("")
         setShowcommentField(false)
         }        
@@ -66,6 +67,7 @@ const DisplayPost: React.FC<Props> = ({ post, displayIcons=true}: Props) => {
                     </>}
                 </Grid>
                 {post.description && <Typography variant='body1'>{post.description}</Typography>}
+                {!post.description && <Typography variant='body1' color='white'>-</Typography>}
                 {showCommentField && displayIcons && 
                 <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                     <TextField
@@ -94,8 +96,12 @@ const DisplayPost: React.FC<Props> = ({ post, displayIcons=true}: Props) => {
                         <>
                         <Typography variant='h5'>comments:</Typography>
                         {allcomments.map(comment => (<Typography sx={{ml:1}}>{comment}</Typography>))}
+                         
                         </>
                     )}
+                    {allcomments.length < 3 && <Typography sx={{ml:1}} color='white'>-</Typography>}
+                    {allcomments.length < 2 && <Typography sx={{ml:1}} color='white'>-</Typography>}
+                    {allcomments.length < 1 && <Typography sx={{ml:1}} color='white'>-</Typography>}
                 </Stack>
             </Stack>
         </Container>
