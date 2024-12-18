@@ -81,7 +81,7 @@ const Home: React.FC = () => {
                         </Button>
                     </Link>
 
-                    <Link href="/">
+                    <Link href="/user/posts/createPost">
                         <Button color="inherit">
                             <Card>
                                 <CardContent>
@@ -99,7 +99,7 @@ const Home: React.FC = () => {
                         </Button>
                     </Link>
 
-                    <Link href="/">
+                    <Link href="/user/planners/createPlanner">
                         <Button color="inherit">
                             <Card>
                                 <CardContent>
