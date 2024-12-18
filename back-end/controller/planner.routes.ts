@@ -10,8 +10,8 @@ plannerRouter.post('/create/:username', async (req: Request, res: Response, next
     try {
         const plannerInput = <PlannerInput>req.body;
         const userName = req.params.username
-        const response = await PlannerService.createPlannerForUserByUsername(plannerInput, userName)
-        res.status(200).json({ message: 'Auth succesful', ...response });
+        const result = await PlannerService.createPlannerForUserByUsername(plannerInput, userName)
+        res.status(200).json(result);
     } catch (error) {
         next(error);
     }

@@ -22,7 +22,7 @@ const UserProfile = () => {
     const { username } = router.query;
 
     useEffect(() => {
-        const fetchUserAndPosts = async () => {
+        const fetchUserAndData = async () => {
             if (!username) return;
 
             try {
@@ -46,7 +46,7 @@ const UserProfile = () => {
             }
         };
 
-        fetchUserAndPosts();
+        fetchUserAndData();
     }, [username]);
 
     return (

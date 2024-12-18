@@ -10,7 +10,7 @@ const getAllPosts = async (): Promise<Post[]> => {
     return Promise.all(prismaPosts.map((post) => Post.from(post)))
 }
 
-const createNewPostForUserByUid = async (post: {name: string, description?: string, comments: string[], activity: Activity}, userId:number): Promise<Post> => {
+const createPostForUserByUsername = async (post: {name: string, description?: string, comments: string[], activity: Activity}, username:string): Promise<Post> => {
     const prismaPost = await database.post.create({
         data: {
             name: post.name, 
@@ -20,7 +20,7 @@ const createNewPostForUserByUid = async (post: {name: string, description?: stri
                 connect: {id: post.activity.id}
             },
             user: {
-                connect: {id: userId}
+                connect: {username}
             }  
         },
         include: {activity: {include: {location: true}} }
@@ -31,5 +31,5 @@ const createNewPostForUserByUid = async (post: {name: string, description?: stri
 
 export default{
     getAllPosts,
-    createNewPostForUserByUid,
+    createPostForUserByUsername,
 }

@@ -14,6 +14,11 @@ const DisplayPost: React.FC<Props> = ({ post }: Props) => {
                 <Typography variant='h5'>{post.name}</Typography>
                 {post.description && <Typography variant='body1'>{post.description}</Typography>}
                 <DisplayActivity activity={post.activity}/>
+                <Stack>
+                    {post.comments && post.comments.map(comment => (
+                        <Typography>{comment}</Typography>
+                    ))}
+                </Stack>
             </Stack>
         </Container>
     );

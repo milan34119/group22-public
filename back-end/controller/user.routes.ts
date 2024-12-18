@@ -92,36 +92,6 @@ userRouter.get('/:username/activities', async (req: Request, res: Response, next
     }
 });
 
-// userRouter.get('/:id/activities', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const user = await UserService.getAllUserActivitiesById(Number(req.params.id));
-//         res.status(200).json(user);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
-
-// userRouter.post('/:id/activity', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const post = <PostInput>req.body;
-//         const result = await UserService.addActivityToUserById(post, Number(req.params.id));
-//         res.status(200).json(result);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
-
-userRouter.post('/:id/post', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const post = <PostInput>req.body;
-        const id = Number(req.params.id);
-        const result = await PostService.addActivityToUserById(post, id);
-        res.status(200).json(result);
-    } catch (error) {
-        next(error);
-    }
-});
-
 /**
  * @swagger
  * /user/registration:
