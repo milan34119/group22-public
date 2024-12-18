@@ -1,62 +1,101 @@
-import { User, extendedUser } from '../../model/User';
+import { User } from '../../model/User';
 import { Post } from '../../model/Post';
+import { Planner } from '../../model/Planner';
 
-test('given valid user, then create user successfully', () => {
-    const user = new extendedUser({
-        id: 1,
-        name: 'Test User',
-        email: 'test@example.com',
-        password: 'lalala123',
-        posts: []
+describe('User Model', () => {
+    test('should create a User instance', () => {
+        const user = new User({
+            id: 1,
+            name: 'John Doe',
+            username: 'johndoe',
+            email: 'john@example.com',
+            password: 'password123',
+            role: 'user',
+            posts: [],
+            planners: [],
+        });
+
+        expect(user.id).toBe(1);
+        expect(user.name).toBe('John Doe');
+        expect(user.username).toBe('johndoe');
+        expect(user.email).toBe('john@example.com');
+        expect(user.password).toBe('password123');
+        expect(user.role).toBe('user');
+        expect(user.posts).toEqual([]);
+        expect(user.planners).toEqual([]);
     });
-    expect(user.getId()).toBe(1);
-    expect(user.getEmail()).toBe('test@example.com');
-    expect(user.name).toBe('Test User');
-    expect(user.password).toBe('lalala123');
-    expect(user.getPosts()).toEqual([]);
-});
 
-test('given valid user, then match password successfully', () => {
-    const user = new User({
-        id: 1,
-        name: 'Test User',
-        email: 'test@example.com',
-        password: 'lalala123',
+    test('should throw an error if required fields are missing', () => {
+        expect(() => {
+            new User({
+                name: '',
+                username: '',
+                email: '',
+                password: '',
+                role: 'user',
+                posts: [],
+                planners: [],
+            });
+        }).toThrow('Name is required');
+
+        expect(() => {
+            new User({
+                name: 'John Doe',
+                username: '',
+                email: '',
+                password: '',
+                role: 'user',
+                posts: [],
+                planners: [],
+            });
+        }).toThrow('Username is required');
+
+        expect(() => {
+            new User({
+                name: 'John Doe',
+                username: 'johndoe',
+                email: '',
+                password: '',
+                role: 'user',
+                posts: [],
+                planners: [],
+            });
+        }).toThrow('User email is required');
+
+        expect(() => {
+            new User({
+                name: 'John Doe',
+                username: 'johndoe',
+                email: 'john@example.com',
+                password: '',
+                role: 'user',
+                posts: [],
+                planners: [],
+            });
+        }).toThrow('User password is required');
     });
-    expect(user.matchPassword('lalala123')).toBe(true);
-    expect(user.matchPassword('wrongpassword')).toBe(false);
-});
 
-test('given valid user, then add post successfully', () => {
-    const user = new extendedUser({
-        id: 1,
-        name: 'Test User',
-        email: 'test@example.com',
-        password: 'lalala123',
-        posts: []
+    test('should create a User instance from Prisma data', () => {
+        const prismaUser = {
+            id: 1,
+            name: 'John Doe',
+            username: 'johndoe',
+            email: 'john@example.com',
+            password: 'password123',
+            role: 'user',
+            posts: [],
+            planners: [],
+        };
+
+        const user = User.from(prismaUser);
+
+        expect(user.id).toBe(1);
+        expect(user.name).toBe('John Doe');
+        expect(user.username).toBe('johndoe');
+        expect(user.email).toBe('john@example.com');
+        expect(user.password).toBe('password123');
+        expect(user.role).toBe('user');
+        expect(user.posts).toEqual([]);
+        expect(user.planners).toEqual([]);
     });
-    const post = new Post({id:1, title:'Test Title', content:'Test Content'});
-    user.addPost(post);
-    expect(user.getPosts()).toContain(post);
 });
-
-test('given invalid user, then throw error when missing name', () => {
-    const user = { id: 1, name: '', email: 'test@example.com', password: 'lalala123' };
-    expect(() => new User(user)).toThrow('User name is required');
-});
-
-test('given invalid user, then throw error when missing email', () => {
-    const user = { id: 1, name: 'Test User', email: '', password: 'lalala123' };
-    expect(() => new User(user)).toThrow('User email is required');
-});
-
-test('given invalid user, then throw error when missing password', () => {
-    const user = { id: 1, name: 'Test User', email: 'test@example.com', password: '' };
-    expect(() => new User(user)).toThrow('User password is required');
-});
-
-// id: number;
-// name: string;
-// email: string;
-// password: string;
-// posts: Post[];
