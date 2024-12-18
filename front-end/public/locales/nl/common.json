@@ -1,0 +1,13 @@
+{
+    "title": "Inloggen - TravelBlog",
+    "login_header": "Inloggen bij TravelBlog",
+    "username_label": "Gebruikersnaam",
+    "password_label": "Wachtwoord",
+    "login_button": "Inloggen",
+    "username_error": "Naam mag niet leeg zijn.",
+    "password_error": "Wachtwoord mag niet leeg zijn.",
+    "login_failed": "Wachtwoord of gebruikersnaam onjuist",
+    "signup_prompt": "Heb je nog geen account?",
+    "signup_link": "Registreer",
+    "guest_link": "verdergaan als Gast"
+}

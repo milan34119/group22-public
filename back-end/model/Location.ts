@@ -1,16 +1,19 @@
-import{
-    Location as LocationPrisma,
-} from '@prisma/client'
-import { Activity } from './Activity'
+import { Location as LocationPrisma } from '@prisma/client';
+import { Activity } from './Activity';
 
 export class Location {
-    readonly id: number
-    readonly name: string
-    readonly description?: string
-    readonly activities?: Activity[]
+    readonly id: number;
+    readonly name: string;
+    readonly description?: string;
+    readonly activities?: Activity[];
 
-    constructor(location: {id?: number, name: string, description?: string, activities?: Activity[]}) {
-        this.validate(location)
+    constructor(location: {
+        id?: number;
+        name: string;
+        description?: string;
+        activities?: Activity[];
+    }) {
+        this.validate(location);
 
         this.id = location.id;
         this.name = location.name;
@@ -18,21 +21,17 @@ export class Location {
         this.activities = location.activities;
     }
 
-    validate(location: {name: string}){
+    validate(location: { name: string }) {
         if (!location.name) {
-            throw new Error("name is required for Location")
+            throw new Error('name is required for Location');
         }
     }
 
-    static from({
-        id,
-        name,
-        description,
-    }:LocationPrisma) {
+    static from({ id, name, description }: LocationPrisma) {
         return new Location({
             id,
             name,
             description,
-        })
+        });
     }
 }

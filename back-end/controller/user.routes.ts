@@ -11,10 +11,19 @@ const userRouter = express.Router();
 
 /**
  * @swagger
- * /user/allUsers:
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * /user:
  *   get:
  *     summary: Retrieve a list of users
  *     description: Get all users from the database.
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of users.
@@ -24,6 +33,8 @@ const userRouter = express.Router();
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/User'
+ *       403:
+ *         description: Unauthorized. Only admins can access this route.
  *       500:
  *         description: Internal server error.
  */
@@ -45,6 +56,8 @@ userRouter.get('/', async (req: Request & { auth: any }, res: Response) => {
  *   get:
  *     summary: Retrieve a user by ID
  *     description: Get a user from the database using their unique ID.
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
@@ -59,11 +72,14 @@ userRouter.get('/', async (req: Request & { auth: any }, res: Response) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized. Authentication required.
  *       404:
  *         description: User not found.
  *       500:
  *         description: Internal server error.
  */
+
 userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await UserService.getUserById(Number(req.params.id));
@@ -73,16 +89,72 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
+/**
+ * @swagger
+ * /user/username/{username}:
+ *   get:
+ *     summary: Gebruiker ophalen op basis van gebruikersnaam
+ *     description: Haalt een gebruiker op uit de database met behulp van de unieke gebruikersnaam.
+ *     parameters:
+ *       - name: username
+ *         in: path
+ *         required: true
+ *         description: De unieke gebruikersnaam van de op te halen gebruiker.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Een gebruikersobject.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: Gebruiker niet gevonden.
+ *       500:
+ *         description: Interne serverfout.
+ */
 userRouter.get('/username/:username', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const username = req.params.username;
-        const user = await UserService.getUserByUsername({username});
+        const user = await UserService.getUserByUsername({ username });
         res.status(200).json(user);
     } catch (error) {
         next(error);
     }
 });
 
+/**
+ * @swagger
+ * /user/{username}/activities:
+ *   get:
+ *     summary: Activiteiten van een gebruiker ophalen
+ *     description: Haalt alle activiteiten op die zijn gekoppeld aan een specifieke gebruiker via de gebruikersnaam.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: username
+ *         in: path
+ *         required: true
+ *         description: De gebruikersnaam van de gebruiker wiens activiteiten moeten worden opgehaald.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Een lijst van activiteiten voor de gebruiker.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Activity'
+ *       401:
+ *         description: Unauthorized. Authentication required.
+ *       404:
+ *         description: Gebruiker niet gevonden.
+ *       500:
+ *         description: Interne serverfout.
+ */
 userRouter.get('/:username/activities', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await UserService.getAllUserActivitiesByUsername(String(req.params.username));
@@ -111,6 +183,10 @@ userRouter.get('/:username/activities', async (req: Request, res: Response, next
  *                 type: string
  *                 example: "John Doe"
  *                 description: "De naam van de gebruiker."
+ *               username:
+ *                 type: string
+ *                 example: "Johndoeusername"
+ *                 description: "De username van de gebruiker. Moet uniek zijn"
  *               email:
  *                 type: string
  *                 example: "johndoe@example.com"
@@ -125,6 +201,7 @@ userRouter.get('/:username/activities', async (req: Request, res: Response, next
  *                 description: "De rol van de gebruiker. Bijvoorbeeld 'admin' of 'user'."
  *             required:
  *               - name
+ *               - username
  *               - email
  *               - password
  *               - role
@@ -144,6 +221,10 @@ userRouter.get('/:username/activities', async (req: Request, res: Response, next
  *                   type: string
  *                   example: "John Doe"
  *                   description: "De naam van de aangemaakte gebruiker."
+ *                 username:
+ *                   type: string
+ *                   example: "johndoeusername"
+ *                   description: "naam vd aangemaakte gebruiker."
  *                 email:
  *                   type: string
  *                   example: "johndoe@example.com"
@@ -194,6 +275,49 @@ userRouter.post('/registration', async (req: Request, res: Response, next: NextF
 //     }
 // });
 
+/**
+ * @swagger
+ * /user/login:
+ *   post:
+ *     summary: Gebruiker authenticeren
+ *     description: Authenticatie-eindpunt voor gebruikers om in te loggen.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: "johndoeusername"
+ *                 description: "De username van de gebruiker."
+ *               password:
+ *                 type: string
+ *                 example: "wachtwoord123"
+ *                 description: "Het wachtwoord van de gebruiker."
+ *             required:
+ *               - username
+ *               - password
+ *     responses:
+ *       200:
+ *         description: Authenticatie succesvol.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Auth succesvol"
+ *                 token:
+ *                   type: string
+ *                   description: "Authenticatietoken"
+ *       400:
+ *         description: Ongeldige inloggegevens.
+ *       500:
+ *         description: Interne serverfout.
+ */
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userInput = <UserInput>req.body;
@@ -204,6 +328,39 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+/**
+ * @swagger
+ * /user/{id}:
+ *   delete:
+ *     summary: Gebruiker verwijderen
+ *     description: Verwijdert een gebruiker uit het systeem. Alleen beschikbaar voor beheerders.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: De unieke ID van de te verwijderen gebruiker.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Gebruiker succesvol verwijderd.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Bevestigingsbericht van verwijdering
+ *       401:
+ *         description: Unauthorized. Authentication required.
+ *       403:
+ *         description: Geen toestemming. Alleen beheerders kunnen gebruikers verwijderen.
+ *       500:
+ *         description: Interne serverfout.
+ */
 userRouter.delete('/:id', async (req: Request & { auth: any }, res: Response) => {
     try {
         if (req.auth.role != 'admin') throw new Error('logged in user must be an admin');
