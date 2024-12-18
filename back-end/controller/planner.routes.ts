@@ -17,4 +17,16 @@ plannerRouter.post('/create/:username', async (req: Request, res: Response, next
     }
 });
 
+plannerRouter.put("/add/:activityId/to/:plannerId", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const activityId = parseInt(req.params.activityId);
+        const plannerId = parseInt(req.params.plannerId);
+        const result = await PlannerService.addActivityToPlanner(activityId, plannerId);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 export { plannerRouter }

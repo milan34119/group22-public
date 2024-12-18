@@ -1,11 +1,12 @@
 import Header from "@components/Header"
 import DisplayPlanner from "@components/planners/Planner";
-import { Paper, Typography } from "@mui/material";
+import { Button, Paper, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2"
 import { Activity, Planner, User } from "@types";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ActivityService from "service/ActivityService";
+import PlannerService from "service/PlannerService";
 import UserService from "service/UserService";
 import withAuth from "util/withAuth";
 
@@ -68,17 +69,31 @@ const addActivityToPlanner = () => {
         fetchUserAndData();
     }, [username]);
 
+    const handeleClick = async (planner: Planner) => {
+        if (!activity || !activity.id) return;
+        if (!planner || !planner.id) return;
+
+        const response = await PlannerService.addActivityToPlanner(activity.id, planner.id);
+
+        if (response.status === 200) {
+            const user = await response.json();
+
+            router.push('/')
+        }
+    }
+
     return (
         <>
             <Header/>
             {activity && planners && <>
                 <Grid container spacing={2} padding={2}>
                 {planners.map((planner) => (
-                <Grid size={6}>    
-                    <Paper elevation={3} sx={{p: 3 }}>
-                        <DisplayPlanner key={planner.id} planner={planner} displayIcons={false}/>
-                    </Paper>
-                </Grid>
+                    <Grid size={6}>    
+                        <Paper elevation={3} sx={{p: 3, hover:"red" }} onClick={() => handeleClick(planner)}>
+                            <DisplayPlanner key={planner.id} planner={planner} displayIcons={false}/>
+                        </Paper>
+                    </Grid>
+                
                 ))}
             </Grid>
             </>}

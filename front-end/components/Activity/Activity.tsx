@@ -12,7 +12,7 @@ type Props = {
 const DisplayActivity: React.FC<Props> = ({ activity, displayIcons=true }: Props) => {
     const router = useRouter();
     return (
-        <Container>
+        <Container sx={{m: 1}}>
         <Paper elevation={1} sx={{p: 2 }}>
             <Stack>
                 <Grid container>

@@ -23,8 +23,15 @@ const createPlannerForUserByUsername = async ({
     return await PlannerDb.createPlannerForUserByUsername(planner, userName)
 }
 
+const addActivityToPlanner = async (activityId:number, plannerId:number):Promise<Planner> => {
+    const returnPlanner = await PlannerDb.addActivityToPlanner(activityId, plannerId);
+    if(!returnPlanner) throw new Error("Something went wrong when adding an activity to a planner");
+    return returnPlanner;
+}
+
 export default {
     getAllPlanners,
     getPlanner,
     createPlannerForUserByUsername,
+    addActivityToPlanner,
 }

@@ -55,8 +55,30 @@ const createPlannerForUserByUsername = async ({name, description, activities}: P
     return Planner.from(prismaPlanner)
 }
 
+const addActivityToPlanner = async (activityId: number, plannerId:number): Promise<Planner> => {
+    const prismaPlanner = await database.planner.update({
+        where: {
+            id:plannerId
+        },
+        data: {
+            activities: {
+                connect: {id: activityId}
+            }
+        },
+        include: {
+            activities: {
+                include: {
+                    location: true
+                }
+            }
+        }
+    });
+    return Planner.from(prismaPlanner)
+}
+
 export default {
     getPlanner,
     getAllPlanners,
     createPlannerForUserByUsername,
+    addActivityToPlanner
 }
