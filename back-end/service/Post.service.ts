@@ -26,7 +26,11 @@ const createPostForUserByUsername = async ({
 }
 const addCommentToPost = async (comment:string, id:number):Promise<Post> => {
     const postComments = (await getPostById(id)).comments
-    const updatedcomments = [...postComments, comment]
+    console.log(postComments)
+    let updatedcomments:string[]
+    if (postComments.length < 3) {updatedcomments = [comment, ...postComments]}
+    else {updatedcomments = [comment, postComments[0], postComments[1]]}
+    console.log(updatedcomments)
     return await postDb.updatePostComments(updatedcomments, id);
 }
 
