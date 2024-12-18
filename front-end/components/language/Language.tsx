@@ -1,3 +1,4 @@
+import { FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
@@ -11,10 +12,12 @@ const Language: React.FC = () => {
         router.push({ pathname, query }, asPath, { locale: newLocale });
     };
     return (
+        <>
         <div className="ml-6">
             <label htmlFor="language" className="text-white">
-                Language
+                Language {" "}
             </label>
+
             <select
                 id="language"
                 className="ml-2 p-1"
@@ -25,6 +28,7 @@ const Language: React.FC = () => {
                 <option value="es">English</option>
             </select>
         </div>
+        </>
     );
 };
 

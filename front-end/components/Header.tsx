@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Typography, Box, Button, IconButton } from '@mui/material';
+import { AppBar, Toolbar, Typography, Box, Button, IconButton, Stack } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
@@ -34,44 +34,22 @@ const Header: React.FC = () => {
         router.refresh();
     };
 
-    const handleMyPostsClick = () => {
-        if (userName) {
-            router.push(`/user/posts/${userName}`);
-        }
-    };
-
     return (
         <AppBar position="static">
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Stack direction={"row"}>
                     <Link href="/" passHref>
                         <Button sx={{ color: 'white' }}>Home</Button>
                     </Link>
                     <Link href="/feed" passHref>
                         <Button sx={{ color: 'white' }}>Feed</Button>
                     </Link>
-                    {!userName && (
-                        <Link href="/user/login" passHref>
-                            <Button sx={{ color: 'white' }}>Login</Button>
-                        </Link>
-                    )}
-                    {userName && (
-                        <Link href="/" passHref>
-                            <Button sx={{ color: 'white' }} onClick={handleLogout}>
-                                Logout
-                            </Button>
-                        </Link>
-                    )}
                     {(role === 'admin' || role === 'user') && (
                         <Link href={`/user/${userName}`} passHref>
                             <Button sx={{ color: 'white' }}>My profile</Button>
                         </Link>
                     )}
-                    {role === 'admin' && (
-                        <Link href="/admin" passHref>
-                            <Button sx={{ color: 'red' }}>ADMIN</Button>
-                        </Link>
-                    )}
+
                     {(role == 'admin' || role == 'user') && (
                         <Link href={`/user/planners/createPlanner`} passHref>
                             <Button sx={{ color: 'white' }}>
@@ -86,12 +64,44 @@ const Header: React.FC = () => {
                             </Button>
                         </Link>
                     )}
+                    {role === 'admin' && (
+                        <Link href="/admin" passHref>
+                            <Button sx={{ color: 'white', backgroundColor: "red" }}>ADMIN</Button>
+                        </Link>
+                    )}
+                </Stack>
+                <Box >
+                    <Stack direction={"row"}>
+                        {userName && (
+                            <Stack justifyContent={"center"}>
+                            <Typography sx={{ color: 'white', marginRight: 2 }}>
+                                Welcome, {userName}
+                            </Typography>
+                            </Stack>
+                        )}
+                        <Stack justifyContent={"center"} minWidth={200}>
+                            <Language />
+                        </Stack>
+                        {!userName && (
+                        <Box justifyContent={"center"} alignContent={"center"} padding={1}>
+                        <Link href="/user/login" >
+                            <Button sx={{ color: 'white' , backgroundColor:"red"}}>Login</Button>
+                        </Link>
+                        </Box>
+                        )}
+                        {userName && (
+                        <Box justifyContent={"center"} alignContent={"center"} padding={1}>
+                        <Link href="/" passHref>
+                            <Button sx={{ color: 'white', backgroundColor:"red" }} onClick={handleLogout}>
+                                Logout
+                            </Button>
+                        </Link>
+                        </Box>
+                        )}
+                        
+                        
+                    </Stack>
                 </Box>
-                {userName && (
-                    <Typography variant="body1" sx={{ marginRight: 2 }}>
-                        Welcome, {userName}!
-                    </Typography>
-                )}
             </Toolbar>
         </AppBar>
     );

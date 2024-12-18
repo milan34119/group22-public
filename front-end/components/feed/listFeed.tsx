@@ -9,6 +9,12 @@ import { Paper } from "@mui/material";
 const ListFeed: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [isLoading, setLoading] = useState(true);
+    const [username, setUsername] = useState("");
+
+    useEffect(() => {
+        const username = localStorage.getItem('loggedInUser');
+        setUsername(username ? username : '');
+    }, []);
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -49,7 +55,7 @@ const ListFeed: React.FC = () => {
                     }).map((post) => (
                     <Grid size={6} key={post.id}>    
                         <Paper elevation={3} sx={{p: 3 }}>
-                            <DisplayPost post={post}/>
+                            <DisplayPost post={post} displayIcons={username?true:false}/>
                         </Paper>
                     </Grid>
                     ))}
