@@ -14,7 +14,7 @@ export type Post = {
     name: string;
     description?: string;
     comments: string[];
-    createdAt?: Date;
+    createdAt: string;
     activity: Activity;
 };
 

@@ -48,6 +48,10 @@ type AuthenticationResponse = {
     name: string;
 };
 
+type CommentInput = {
+    comment: string
+}
+
 export {
     PostInput,
     UserInput,
@@ -56,4 +60,5 @@ export {
     PlannerInput,
     LoginInput,
     AuthenticationResponse,
+    CommentInput,
 };

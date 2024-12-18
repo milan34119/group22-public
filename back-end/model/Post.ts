@@ -53,12 +53,14 @@ export class Post {
         name,
         description,
         comments,
+        createdAt, 
         activity,
     }: PostPrisma & { activity: ActivityPrisma & { location: LocationPrisma } }) {
         return new Post({
             id,
             name,
             description,
+            createdAt,
             comments,
             activity: Activity.from(activity),
         });

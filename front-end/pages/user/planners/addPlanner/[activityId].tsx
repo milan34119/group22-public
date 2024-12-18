@@ -4,7 +4,7 @@ import { Button, Paper, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2"
 import { Activity, Planner, User } from "@types";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useDebugValue, useEffect, useState } from "react";
 import ActivityService from "service/ActivityService";
 import PlannerService from "service/PlannerService";
 import UserService from "service/UserService";
@@ -59,6 +59,7 @@ const addActivityToPlanner = () => {
                 }
 
                 const userData = await response.json() as User;
+                console.log(userData.planners)
                 setPlanners(userData.planners || []);
             } catch (err) {
             } finally {
@@ -95,6 +96,7 @@ const addActivityToPlanner = () => {
                     </Grid>
                 
                 ))}
+            {(!planners || planners.length == 0) && <Typography>You don't seem to have any planners...</Typography>}
             </Grid>
             </>}
         </>

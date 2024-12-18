@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AppBar, Toolbar, Typography, Box, Button, IconButton } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

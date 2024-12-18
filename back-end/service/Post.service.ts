@@ -5,16 +5,11 @@ import { PostInput } from "../types";
 import UserService from "./User.service";
 import ActivityService from "./Activity.service";
 
-// const addActivityToUserById = async ({
-//     name,
-//     description,
-//     comments,
-//     activity
-// }: PostInput, id: number): Promise<Post> => {
-//     const gotActivity = await ActivityDb.getActivity(activity.id)
-//     const post = new Post({name, description, comments, activity: gotActivity})
-//     return await postDb.createNewPostForUserByUid(post, id);
-// };
+const getPostById = async (id:number):Promise<Post> => {
+    const post = await postDb.getPostById(id)
+    if(!post) throw new Error("no post with that id.")
+    return post
+}
 
 const getAllPosts = async ():Promise<Post[]> => {
     return await postDb.getAllPosts();
@@ -29,9 +24,16 @@ const createPostForUserByUsername = async ({
     const post = new Post({name, description, activity, comments:[]})
     return await postDb.createPostForUserByUsername(post, userName)
 }
+const addCommentToPost = async (comment:string, id:number):Promise<Post> => {
+    const postComments = (await getPostById(id)).comments
+    const updatedcomments = [...postComments, comment]
+    return await postDb.updatePostComments(updatedcomments, id);
+}
 
 export default{
     // addActivityToUserById,
     getAllPosts,
-    createPostForUserByUsername
+    createPostForUserByUsername,
+    addCommentToPost,
+
 }

@@ -24,9 +24,24 @@ const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/post/${username
 return response
 }
 
+const addCommentToPost = async (content: {comment:string}, id:number) => {
+    const token = localStorage.getItem('token');
+
+    const response =  await fetch(process.env.NEXT_PUBLIC_API_URL + `/post/addComment/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(content),
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return response
+}
+
 const postService = {
     getAllPosts,
     createPost,
+    addCommentToPost,
 }
 
 export default postService

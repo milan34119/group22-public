@@ -89,6 +89,8 @@ const deleteUser = async (id: number): Promise<User> => {
     return await userDb.deleteUser(id);
 };
 
+
+
 export default {
     getAllUsers,
     getUserById,

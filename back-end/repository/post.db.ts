@@ -29,7 +29,42 @@ const createPostForUserByUsername = async (post: {name: string, description?: st
     return Post.from(prismaPost)
 };
 
+const getPostById = async (id:number) => {
+    try {
+        const prismaPost = await database.post.findUnique({
+            where: {
+                id
+            },
+            include: {activity: {include: {location: true}} }
+        });
+        return Post.from(prismaPost)
+    } catch(error) {
+        console.error(error)
+        throw new Error("Database error")
+    }
+}
+
+const updatePostComments = async (updatedComments: string[], id:number):Promise<Post> => {
+    try {
+        const prismaPost = await database.post.update({
+            where: {
+                id
+            },
+            data: {
+                comments: updatedComments
+            },
+            include: {activity: {include: {location: true}} }
+        });
+        return Post.from(prismaPost)
+    } catch (error) {
+        console.error(error)
+        throw new Error("Database error")
+    }
+}
+
 export default{
     getAllPosts,
     createPostForUserByUsername,
+    getPostById,
+    updatePostComments
 }

@@ -25,16 +25,6 @@ const UserSignupForm: React.FC = () => {
         setPasswordError("");
     }
 
-    const addError = (messages: StatusMessage[], error:string) => {
-        return [
-            ...messages,
-            {
-                type: 'error',
-                message: error,
-            },
-        ]
-    }
-
     const validate = ({name, username, email, password}: {name:string, username: string, email:string, password:string}) => {
         let isValid = true
         if (!name || name.trim() == "") {

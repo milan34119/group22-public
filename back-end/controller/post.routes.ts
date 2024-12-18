@@ -1,6 +1,6 @@
 import express, {NextFunction, Request, Response} from 'express';
 import PostService from '../service/Post.service';
-import { PostInput } from '../types';
+import { CommentInput, PostInput } from '../types';
 
 const postRouter = express.Router();
 
@@ -20,6 +20,17 @@ postRouter.post('/:username', async (req: Request, res: Response, next: NextFunc
         const userName = req.params.username
         const result = await PostService.createPostForUserByUsername(plannerInput, userName)
         res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
+postRouter.put('/addComment/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const comment = (<CommentInput>req.body).comment;
+        const id = parseInt(req.params.id)
+        const response = await PostService.addCommentToPost(comment, id);
+        res.status(200).json(response);
     } catch (error) {
         next(error);
     }
