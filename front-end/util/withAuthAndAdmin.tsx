@@ -36,7 +36,7 @@ const withAdminAuth = <P extends object>(WrappedComponent: React.ComponentType<P
                         router.push('/');
                     } else {
                         if(!tokenIsStillValid(token)){
-                            localStorage.setItem('loggedInUser', '');
+                            localStorage.removeItem('loggedInUser');
                             localStorage.removeItem('token');
                             router.push('/')
                         }

@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { expressjwt } from 'express-jwt';
 import postRouter from './controller/post.routes';
+import { plannerRouter } from './controller/planner.routes';
 
 const app = express();
 dotenv.config();
@@ -26,6 +27,7 @@ app.use(
 
 app.use('/user', userRouter);
 app.use('/post', postRouter);
+app.use('/planner', plannerRouter)
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

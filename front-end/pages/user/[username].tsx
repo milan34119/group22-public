@@ -9,6 +9,7 @@ import { Box, CircularProgress, Typography, Paper, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2'
 import ProfileInfoBox from '@components/users/profileInfo';
 import DisplayPost from '@components/posts/Post';
+import DisplayPlanner from '@components/planners/Planner';
 
 const UserProfile = () => {
     const [user, setUser] = useState<User | null>(null);
@@ -63,6 +64,17 @@ const UserProfile = () => {
                 </Grid>
                 ))}
             </Grid>} 
+
+            { displayWhat == "planners" &&      
+             <Grid container spacing={2} padding={2}>
+                {planners.map((planner) => (
+                <Grid size={6}>    
+                    <Paper elevation={3} sx={{p: 3 }}>
+                        <DisplayPlanner key={planner.id} planner={planner}/>
+                    </Paper>
+                </Grid>
+                ))}
+            </Grid>}
         </>
     );
 };

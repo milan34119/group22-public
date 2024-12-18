@@ -30,7 +30,7 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
                 router.push('/');
             } else {
                 if(!tokenIsStillValid(token)){
-                    localStorage.setItem('loggedInUser', '');
+                    localStorage.removeItem('loggedInUser');
                     localStorage.removeItem('token');
                     router.push('/')
                 }

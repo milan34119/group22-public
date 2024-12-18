@@ -30,7 +30,7 @@ const getPlanner = async (id:number):Promise<Planner|null> => {
     return prismaPlanner ? Planner.from(prismaPlanner) : null;
 }
 
-const createPlanner = async ({name, description, activities}: Planner, userId: number):Promise<Planner> => {
+const createPlannerForUserByUsername = async ({name, description, activities}: Planner, username: string):Promise<Planner> => {
     const prismaPlanner = await database.planner.create({
         data: {
             name,
@@ -40,7 +40,7 @@ const createPlanner = async ({name, description, activities}: Planner, userId: n
             },
             User: {
                 connect: {
-                    id: userId
+                    username
                 }
             }
         },
@@ -58,5 +58,5 @@ const createPlanner = async ({name, description, activities}: Planner, userId: n
 export default {
     getPlanner,
     getAllPlanners,
-    createPlanner,
+    createPlannerForUserByUsername,
 }

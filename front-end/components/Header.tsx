@@ -75,6 +75,13 @@ const Header: React.FC = () => {
                             <Button sx={{ color: 'red' }}>ADMIN</Button>
                         </Link>
                     )}
+                    {(role == 'admin' || role == 'user') && (
+                        <Link href={`/user/planners/createPlanner`} passHref>
+                            <Button sx={{ color: 'white' }}>
+                                Add planner 
+                            </Button>
+                        </Link>
+                    )}
                 </Box>
                 {/* {(role == 'admin' || role == 'user') && (
                     <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>

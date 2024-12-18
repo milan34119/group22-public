@@ -13,18 +13,18 @@ const getPlanner = async (id:number):Promise<Planner> => {
     return returnPlanner;
 }
 
-const createPlannerForUser = async ({
+const createPlannerForUserByUsername = async ({
     name, 
     description, 
     activities:ActivitiesInput,
-}:PlannerInput, userId: number):Promise<Planner> => {
-    const activities = await Promise.all( ActivitiesInput.map(activity => ActivityService.getActivity(activity.id)))
+}:PlannerInput, userName: string):Promise<Planner> => {
+    const activities =  ActivitiesInput ? await Promise.all( ActivitiesInput.map(activity => ActivityService.getActivity(activity.id))): [];
     const planner = new Planner({name, description, activities})
-    return await PlannerDb.createPlanner(planner, userId)
+    return await PlannerDb.createPlannerForUserByUsername(planner, userName)
 }
 
 export default {
     getAllPlanners,
     getPlanner,
-    createPlannerForUser,
+    createPlannerForUserByUsername,
 }
