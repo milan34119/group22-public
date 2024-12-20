@@ -6,6 +6,38 @@ import LocationService from '../service/Location.service';
 
 const LocationRouter = express.Router();
 
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * /location/:
+ *   post:
+ *     summary: create a new location
+ *     tags: 
+ *          - admin
+ *          - user
+ *     description: create a new location based on json input.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: An activity.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Activity'
+ *       403:
+ *         description: Unauthorized. Only admins or users can access this route.
+ *       500:
+ *         description: Internal server error.
+ */
 
 LocationRouter.post('/', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {

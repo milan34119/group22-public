@@ -42,15 +42,6 @@ const loginUser = async (content: { username: string; password: string }) => {
     });
 };
 
-const getAllUserActivitiesById = async (id: number) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + `/user/${id}/activities`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-};
-
 const getAllUserActivitiesByUsername = async (username: string) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + `/user/${username}/activities`, {
         method: 'GET',
@@ -94,7 +85,6 @@ const UserService = {
     getUserById,
     getUserByUsername,
     loginUser,
-    getAllUserActivitiesById,
     addUser,
     deleteUser,
     getAllUserActivitiesByUsername,

@@ -16,6 +16,9 @@ const userRouter = express.Router();
  * /user:
  *   get:
  *     summary: Retrieve a list of users
+ *     tags: 
+ *          - admin
+ *          - user
  *     description: Get all users from the database.
  *     security:
  *       - bearerAuth: []
@@ -51,6 +54,9 @@ userRouter.get('/', async (req: Request & { auth: any } & { auth: any }, res: Re
  *   get:
  *     summary: Retrieve a user by ID
  *     description: Get a user from the database using their unique ID.
+ *     tags: 
+ *          - admin
+ *          - user
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -90,6 +96,9 @@ userRouter.get('/:id', async (req: Request & { auth: any }, res: Response, next:
  * /user/username/{username}:
  *   get:
  *     summary: Gebruiker ophalen op basis van gebruikersnaam
+ *     tags: 
+ *          - admin
+ *          - user
  *     description: Haalt een gebruiker op uit de database met behulp van de unieke gebruikersnaam.
  *     parameters:
  *       - name: username
@@ -127,6 +136,9 @@ userRouter.get('/username/:username', async (req: Request & { auth: any }, res: 
  *   get:
  *     summary: Activiteiten van een gebruiker ophalen
  *     description: Haalt alle activiteiten op die zijn gekoppeld aan een specifieke gebruiker via de gebruikersnaam.
+ *     tags: 
+ *          - admin
+ *          - user
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -169,7 +181,7 @@ userRouter.get('/:username/activities', async (req: Request & { auth: any }, res
  *     summary: Registreer een nieuwe gebruiker
  *     description: Deze route maakt een nieuwe gebruiker aan in het systeem met de opgegeven gegevens.
  *     tags:
- *       - Users
+ *       - guest
  *     requestBody:
  *       required: true
  *       content:
@@ -268,6 +280,8 @@ userRouter.post('/registration', async (req: Request & { auth: any }, res: Respo
  * /user/login:
  *   post:
  *     summary: Gebruiker authenticeren
+ *     tags: 
+ *       - guest
  *     description: Authenticatie-eindpunt voor gebruikers om in te loggen.
  *     requestBody:
  *       required: true
@@ -321,6 +335,8 @@ userRouter.post('/login', async (req: Request & { auth: any }, res: Response, ne
  * /user/{id}:
  *   delete:
  *     summary: Gebruiker verwijderen
+ *     tags: 
+ *          - admin
  *     description: Verwijdert een gebruiker uit het systeem. Alleen beschikbaar voor beheerders.
  *     security:
  *       - bearerAuth: []

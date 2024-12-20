@@ -5,6 +5,38 @@ import PlannerService from '../service/Planner.service';
 
 const plannerRouter = express.Router();
 
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * /planner:
+ *   post:
+ *     summary: create a new planner
+ *     tags: 
+ *          - admin
+ *          - user
+ *     description: create a new planner based on a json body.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: An activity.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Activity'
+ *       403:
+ *         description: Unauthorized. Only admins or users can access this route.
+ *       500:
+ *         description: Internal server error.
+ */
 
 plannerRouter.post('/create/:username', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
@@ -18,6 +50,39 @@ plannerRouter.post('/create/:username', async (req: Request & { auth: any }, res
         next(error);
     }
 });
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * /planner/add/{activityId}/to/{plannerId}:
+ *   put:
+ *     summary: add a planner to an activity
+ *     tags: 
+ *          - admin
+ *          - user
+ *     description: Add an existing activity to an existing planner.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: An activity.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Activity'
+ *       403:
+ *         description: Unauthorized. Only admins or users can access this route.
+ *       500:
+ *         description: Internal server error.
+ */
 
 plannerRouter.put("/add/:activityId/to/:plannerId", async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {

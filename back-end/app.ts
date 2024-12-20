@@ -56,12 +56,17 @@ const swaggerOpts = {
                         name: {
                             type: 'string',
                         },
+                        username: {
+                            type: "string",
+                        },
                         email: {
                             type: 'string',
                         },
                         password: {
                             type: 'string',
-                            description: 'User password (should not be exposed in responses)',
+                        },
+                        role: {
+                            type: 'string',
                         },
                         posts: {
                             type: 'array',
@@ -69,8 +74,14 @@ const swaggerOpts = {
                                 $ref: '#/components/schemas/Post',
                             },
                         },
+                        planners: {
+                            type: 'array',
+                            items: {
+                                $ref: '#/components/schemas/Planner'
+                            }
+                        }
                     },
-                    required: ['id', 'name', 'email', 'password'],
+                    required: ['id', 'name', 'username','email','password', 'role', 'posts', 'planners'],
                 },
                 Post: {
                     type: 'object',
@@ -79,19 +90,88 @@ const swaggerOpts = {
                             type: 'number',
                             format: 'int64',
                         },
-                        title: {
+                        name: {
                             type: 'string',
                         },
-                        content: {
+                        description: {
                             type: 'string',
                         },
-                        date: {
+                        comments: {
+                            type: 'array',
+                            items: 'string'
+                        },
+                        createdAt: {
                             type: 'string',
                             format: 'date-time',
                         },
+                        activity : {
+                            type: {
+                                $ref: '#/components/schemas/Activity'
+                            }        
+                        }
                     },
-                    required: ['id', 'title', 'content'],
+                    required: ['id', 'name', 'comments', 'createdAt', 'activity'],
                 },
+                Planner: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'number',
+                            format: 'int64',
+                        },
+                        name: {
+                            type: 'string',
+                        },
+                        description: {
+                            type: 'string',
+                        },
+                        activities : {
+                            type: 'array',
+                            items: {
+                                $ref: '#/components/schemas/Activity'
+                            }
+                        }
+                    },
+                    required: ['id', 'name', 'activities']
+                },
+                Activity: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'number',
+                            format: 'int64',
+                        },
+                        name: {
+                            type: 'string',
+                        },
+                        description: {
+                            type: 'string',
+                        },
+                        location : {
+                            type: 
+                            {
+                                $ref: '#/components/schemas/Location'
+                            }        
+                        }
+                    },
+                    required: ['id', 'name', 'location']
+                },
+                Location: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'number',
+                            format: 'int64',
+                        },
+                        name: {
+                            type: 'string',
+                        },
+                        description: {
+                            type: 'string',
+                        },
+                    },
+                    required: ['id', 'name']
+                }
             },
         },
     },

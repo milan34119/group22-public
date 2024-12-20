@@ -31,20 +31,6 @@ export class Planner {
         }
     }
 
-    // static from({
-    //     id,
-    //     name,
-    //     description,
-    //     activities
-    // }: PlannerPrisma & {activities: (ActivityPrisma & {location: LocationPrisma})[]}) {
-    //     return new Planner({
-    //         id,
-    //         name,
-    //         description,
-    //         activities: activities.map(activity => Activity.from(activity))
-    //     })
-    // }
-
     static from({
         id,
         name,
