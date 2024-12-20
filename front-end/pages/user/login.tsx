@@ -1,15 +1,17 @@
 import React from 'react';
 import UserLoginForm from '../../components/users/userLoginForm';
-import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Header from '@components/Header';
+import { useTranslation } from 'next-i18next';
 
 const UserLoginPage: React.FC = () => {
+    const { t } = useTranslation('common');
+
     return <UserLoginForm />;
 };
 
 export const getServerSideProps = async (context: { locale: any }) => {
     const { locale } = context;
+    console.log(locale);
 
     return {
         props: {

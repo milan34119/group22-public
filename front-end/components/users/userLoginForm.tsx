@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 
 const Home: React.FC = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('common');
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
