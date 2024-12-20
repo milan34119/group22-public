@@ -9,8 +9,8 @@ import {
     CardContent,
     Button,
 } from '@mui/material';
-import Header from 'components/Header';
-import withAuth from 'util/withAuth';
+import Header from '@/components/Header';
+import withAuth from '@/util/withAuth';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
@@ -24,13 +24,6 @@ const Home: React.FC = () => {
 
     return (
         <>
-            <Head>
-                <title>Travelblog Platform</title>
-                <meta name="description" content="A platform to track and share travel memories" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-
             <Header />
 
             <Container maxWidth="md" sx={{ mt: 4 }}>

@@ -1,15 +1,14 @@
-import Header from '@components/Header';
-import PostOverviewTable from '@components/posts/PostOverviewTable';
-import { Planner, Post, User } from '@types';
+import Header from '@/components/Header';
+import { Planner, Post, User } from '@/types';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import UserService from 'service/UserService';
-import withAuth from 'util/withAuth';
+import UserService from '@/service/UserService';
+import withAuth from '@/util/withAuth';
 import { Box, CircularProgress, Typography, Paper, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2'
-import ProfileInfoBox from '@components/users/profileInfo';
-import DisplayPost from '@components/posts/Post';
-import DisplayPlanner from '@components/planners/Planner';
+import ProfileInfoBox from '@/components/users/profileInfo';
+import DisplayPost from '@/components/posts/Post';
+import DisplayPlanner from '@/components/planners/Planner';
 
 const UserProfile = () => {
     const [user, setUser] = useState<User | null>(null);
@@ -59,7 +58,7 @@ const UserProfile = () => {
                 {posts.map((post) => (
                 <Grid size={6}>    
                     <Paper elevation={3} sx={{p: 3 }}>
-                        <DisplayPost key={post.id} post={post} displayIcons={false}/>
+                        <DisplayPost post={post} displayIcons={false}/>
                     </Paper>
                 </Grid>
                 ))}
@@ -70,7 +69,7 @@ const UserProfile = () => {
                 {planners.map((planner) => (
                 <Grid size={6}>    
                     <Paper elevation={3} sx={{p: 3 }}>
-                        <DisplayPlanner key={planner.id} planner={planner} displayIcons={false}/>
+                        <DisplayPlanner planner={planner} displayIcons={false}/>
                     </Paper>
                 </Grid>
                 ))}

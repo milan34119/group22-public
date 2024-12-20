@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { ComponentType } from 'react';
 
 type DecodedToken = {
+    role: string;
     exp: number;
 };
 
@@ -26,15 +27,26 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
 
         useEffect(() => {
             const token = localStorage.getItem('token');
+
             if (!token) {
                 router.push('/');
             } else {
-                if(!tokenIsStillValid(token)){
-                    localStorage.removeItem('loggedInUser');
-                    localStorage.removeItem('token');
-                    router.push('/')
+                try {
+                    const decodedToken = jwtDecode<DecodedToken>(token);
+                    if (!(decodedToken.role === 'admin') && !(decodedToken.role === "user")) {
+                        router.push('/');
+                    } else {
+                        if(!tokenIsStillValid(token)){
+                            localStorage.removeItem('loggedInUser');
+                            localStorage.removeItem('token');
+                            router.push('/')
+                        }
+                        else setIsLoading(false);
+                    }
+                } catch (error) {
+                    console.error('Failed to decode token:', error);
+                    router.push('/');
                 }
-                else setIsLoading(false);
             }
         }, [router]);
 

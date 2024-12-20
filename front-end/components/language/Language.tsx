@@ -1,6 +1,6 @@
 import { FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 const Language: React.FC = () => {
     const router = useRouter();
@@ -24,8 +24,8 @@ const Language: React.FC = () => {
                 value={locale}
                 onChange={handleLanguageChange}
             >
-                <option value="en">Dutch</option>
-                <option value="es">English</option>
+                <option value="en">English</option>
+                <option value="nl">Nederlands</option>
             </select>
         </div>
         </>

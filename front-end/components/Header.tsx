@@ -41,9 +41,12 @@ const Header: React.FC = () => {
                     <Link href="/" passHref>
                         <Button sx={{ color: 'white' }}>Home</Button>
                     </Link>
+
                     <Link href="/feed" passHref>
                         <Button sx={{ color: 'white' }}>Feed</Button>
                     </Link>
+
+                    
                     {(role === 'admin' || role === 'user') && (
                         <Link href={`/user/${userName}`} passHref>
                             <Button sx={{ color: 'white' }}>My profile</Button>
@@ -72,7 +75,7 @@ const Header: React.FC = () => {
                 </Stack>
                 <Box >
                     <Stack direction={"row"}>
-                        {userName && (
+                        {userName &&  !(role === "guest") && (
                             <Stack justifyContent={"center"}>
                             <Typography sx={{ color: 'white', marginRight: 2 }}>
                                 Welcome, {userName}
@@ -82,14 +85,14 @@ const Header: React.FC = () => {
                         <Stack justifyContent={"center"} minWidth={200}>
                             <Language />
                         </Stack>
-                        {!userName && (
+                        {(!userName || (role === "guest")) && (
                         <Box justifyContent={"center"} alignContent={"center"} padding={1}>
                         <Link href="/user/login" >
                             <Button sx={{ color: 'white' , backgroundColor:"red"}}>Login</Button>
                         </Link>
                         </Box>
                         )}
-                        {userName && (
+                        {userName && !(role === "guest") && (
                         <Box justifyContent={"center"} alignContent={"center"} padding={1}>
                         <Link href="/" passHref>
                             <Button sx={{ color: 'white', backgroundColor:"red" }} onClick={handleLogout}>

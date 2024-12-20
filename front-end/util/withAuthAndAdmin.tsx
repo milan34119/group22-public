@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { jwtDecode } from 'jwt-decode';
 
 type DecodedToken = {
-    role?: string;
+    role: string;
     exp: number;
 };
 

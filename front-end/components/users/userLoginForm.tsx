@@ -1,13 +1,14 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Container, Box, Typography, TextField, Button, Link } from '@mui/material';
-import UserService from 'service/UserService';
+import { Container, Box, Typography, TextField, Button, Link, Stack } from '@mui/material';
+import UserService from '@/service/UserService';
 import styles from '@styles/home.module.css';
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { useTranslation } from 'next-i18next';
+import Language from '@/components/language/Language';
 
 const Home: React.FC = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation("en");
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -39,6 +40,11 @@ const Home: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        i18n.changeLanguage('en')
+        console.log(i18n.language)
+        console.log(t("title"))
+        console.log(t('test'))
+
         clearErrors();
 
         if (!validate()) {
@@ -62,14 +68,29 @@ const Home: React.FC = () => {
         }
     };
 
+    const handleGuest = async () => {
+        clearErrors();
+
+        const user = { username: "GUEST", password: "GUEST"};
+        const response = await UserService.loginUser(user);
+
+        if (response.status === 200) {
+            const user = await response.json();
+
+            localStorage.setItem('token', user.token);
+            localStorage.setItem('loggedInUser', user.username);
+
+            router.push('/');
+        } else {
+            setPasswordError(t('login_error'));
+        }
+    };
+
     return (
         <>
-            <Head>
-                <title>{t('page_title')}</title>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            </Head>
 
             <Container component="main" maxWidth="xs">
+                
                 <Box
                     className={styles.form_container}
                     sx={{
@@ -86,6 +107,10 @@ const Home: React.FC = () => {
                         {t('login_header')}
                     </Typography>
 
+                    {/* <Box>
+                    <Language/>
+                    </Box> */}
+
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
@@ -97,7 +122,7 @@ const Home: React.FC = () => {
                             autoComplete="username"
                             autoFocus
                             type="text"
-                            onChange={(e) => {
+                            onChange={(e: { target: { value: SetStateAction<string>; }; }) => {
                                 setUsername(e.target.value);
                             }}
                         />
@@ -111,7 +136,7 @@ const Home: React.FC = () => {
                             type="password"
                             id="password"
                             autoComplete="current-password"
-                            onChange={(e) => {
+                            onChange={(e: { target: { value: SetStateAction<string>; }; }) => {
                                 setPassword(e.target.value);
                             }}
                         />
@@ -132,10 +157,10 @@ const Home: React.FC = () => {
                             </Link>
                         </Typography>
                         <Typography variant="body2" align="center">
-                            <Link href="/" variant="body2">
-                                {t('continue_guest')}
-                            </Link>
-                        </Typography>
+                            <Button onClick={() => (handleGuest())}>
+                                    {t('continue_guest')}
+                            </Button>
+                      </Typography>
                     </Box>
                 </Box>
             </Container>
