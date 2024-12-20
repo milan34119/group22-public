@@ -13,21 +13,21 @@ const Language: React.FC = () => {
     };
     return (
         <>
-        <div className="ml-6">
-            <label htmlFor="language" className="text-white">
-                Language {" "}
-            </label>
+            <div className="ml-6">
+                <label htmlFor="language" className="text-white">
+                    Language{' '}
+                </label>
 
-            <select
-                id="language"
-                className="ml-2 p-1"
-                value={locale}
-                onChange={handleLanguageChange}
-            >
-                <option value="en">English</option>
-                <option value="nl">Nederlands</option>
-            </select>
-        </div>
+                <select
+                    id="language"
+                    className="ml-2 p-1"
+                    value={locale}
+                    onChange={handleLanguageChange}
+                >
+                    <option value="nl">Dutch</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
         </>
     );
 };

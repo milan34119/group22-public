@@ -8,7 +8,11 @@ import { useTranslation } from 'next-i18next';
 import Language from '@/components/language/Language';
 
 const Home: React.FC = () => {
+<<<<<<< HEAD
     const { t, i18n } = useTranslation("en");
+=======
+    const { t } = useTranslation('common');
+>>>>>>> 7f97b67edad5efc61efc8b681ec90d98e231e0f2
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
