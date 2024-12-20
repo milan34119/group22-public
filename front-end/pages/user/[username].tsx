@@ -1,18 +1,19 @@
-import Header from '@/components/Header';
 import { Planner, Post, User } from '@/types';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import UserService from '@/service/UserService';
 import withAuth from '@/util/withAuth';
 import { Box, CircularProgress, Typography, Paper, Stack } from '@mui/material';
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid2';
 import ProfileInfoBox from '@/components/users/profileInfo';
 import DisplayPost from '@/components/posts/Post';
 import DisplayPlanner from '@/components/planners/Planner';
+import React from 'react';
+import Header from '@/components/Header';
 
 const UserProfile = () => {
     const [user, setUser] = useState<User | null>(null);
-    const [displayWhat, setDisplaywhat] = useState<string>("")
+    const [displayWhat, setDisplaywhat] = useState<string>('');
     const [posts, setPosts] = useState<Post[]>([]);
     const [planners, setPlanners] = useState<Planner[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -34,7 +35,7 @@ const UserProfile = () => {
                     return;
                 }
 
-                const userData = await response.json() as User;
+                const userData = (await response.json()) as User;
                 setUser(userData);
                 setPosts(userData.posts || []);
                 setPlanners(userData.planners || []);
@@ -50,30 +51,32 @@ const UserProfile = () => {
 
     return (
         <>
-            <Header/>
-            {user && <ProfileInfoBox user={user} setDisplayWhat={setDisplaywhat}/>}
+            <Header />
+            {user && <ProfileInfoBox user={user} setDisplayWhat={setDisplaywhat} />}
 
-            { displayWhat == "posts" &&      
-             <Grid container spacing={2} padding={2}>
-                {posts.map((post) => (
-                <Grid size={6}>    
-                    <Paper elevation={3} sx={{p: 3 }}>
-                        <DisplayPost post={post} displayIcons={false}/>
-                    </Paper>
+            {displayWhat == 'posts' && (
+                <Grid container spacing={2} padding={2}>
+                    {posts.map((post) => (
+                        <Grid size={6}>
+                            <Paper elevation={3} sx={{ p: 3 }}>
+                                <DisplayPost post={post} displayIcons={false} />
+                            </Paper>
+                        </Grid>
+                    ))}
                 </Grid>
-                ))}
-            </Grid>} 
+            )}
 
-            { displayWhat == "planners" &&      
-             <Grid container spacing={2} padding={2}>
-                {planners.map((planner) => (
-                <Grid size={6}>    
-                    <Paper elevation={3} sx={{p: 3 }}>
-                        <DisplayPlanner planner={planner} displayIcons={false}/>
-                    </Paper>
+            {displayWhat == 'planners' && (
+                <Grid container spacing={2} padding={2}>
+                    {planners.map((planner) => (
+                        <Grid size={6}>
+                            <Paper elevation={3} sx={{ p: 3 }}>
+                                <DisplayPlanner planner={planner} displayIcons={false} />
+                            </Paper>
+                        </Grid>
+                    ))}
                 </Grid>
-                ))}
-            </Grid>}
+            )}
         </>
     );
 };

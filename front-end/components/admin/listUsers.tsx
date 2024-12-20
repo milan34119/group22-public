@@ -40,9 +40,9 @@
 // };
 
 // export default UserList;
-import { User } from '@types';
+import { User } from '@/types';
 import { useState, useEffect } from 'react';
-import UserService from 'service/UserService';
+import UserService from '@/service/UserService';
 import ListUserItem from './listUsersItem';
 import { CircularProgress, Grid } from '@mui/material';
 
@@ -73,20 +73,20 @@ const UserList: React.FC = () => {
 
     return (
         <>
-        <p></p>
-        <Grid container spacing={2}>
-            {isLoading ? (
-                <Grid item xs={12} container justifyContent="center">
-                    <CircularProgress />
-                </Grid>
-            ) : (
-                users.map((user) => (
-                    <Grid item xs={12} sm={6} md={4} key={user.id}>
-                        <ListUserItem user={user} deleteUser={removeUser} />
+            <p></p>
+            <Grid container spacing={2}>
+                {isLoading ? (
+                    <Grid item xs={12} container justifyContent="center">
+                        <CircularProgress />
                     </Grid>
-                ))
-            )}
-        </Grid>
+                ) : (
+                    users.map((user) => (
+                        <Grid item xs={12} sm={6} md={4} key={user.id}>
+                            <ListUserItem user={user} deleteUser={removeUser} />
+                        </Grid>
+                    ))
+                )}
+            </Grid>
         </>
     );
 };

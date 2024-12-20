@@ -1,4 +1,5 @@
 {
+    "page_title": "TravelBlog Login",
     "title": "Inloggen - TravelBlog",
     "login_header": "Inloggen bij TravelBlog",
     "username_label": "Gebruikersnaam",
@@ -9,5 +10,17 @@
     "login_failed": "Wachtwoord of gebruikersnaam onjuist",
     "signup_prompt": "Heb je nog geen account?",
     "signup_link": "Registreer",
-    "guest_link": "verdergaan als Gast"
+    "guest_link": "Verdergaan als gast",
+    "no_account": "Geen account?",
+    "signup": "Sign up",
+    "continue_guest": "Verdergaan als gast",
+    "signup_title": "Registreren - TravelBlog",
+    "signup_header": "Registreer bij TravelBlog",
+    "name_label": "Naam",
+    "email_label": "E-mailadres",
+    "signup_button": "Registreer",
+    "name_error": "Naam mag niet leeg zijn.",
+    "email_error": "E-mailadres mag niet leeg zijn.",
+    "signin_prompt": "Heb je al een account?",
+    "login_link": "Inloggen"
 }

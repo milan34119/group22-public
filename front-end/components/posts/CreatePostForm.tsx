@@ -1,22 +1,22 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Container, Box, Typography, TextField, Button, Link, Alert, Paper } from '@mui/material';
-import PlannerService from 'service/PlannerService';
-import styles from '@styles/home.module.css';
+import PlannerService from '@/service/PlannerService';
+import styles from '@/styles/home.module.css';
 import { useEffect, useState } from 'react';
-import { Activity, Location, Planner, Post, User } from '@types';
+import { Activity, Location, Planner, Post, User } from '@/types';
 import { t } from 'i18next';
 import { setEngine } from 'crypto';
-import DisplayActivity from '@components/Activity/Activity';
-import ActivityService from 'service/ActivityService';
-import LocationService from 'service/LocationService';
-import postService from 'service/PostService';
+import DisplayActivity from '@/components/Activity/Activity';
+import ActivityService from '@/service/ActivityService';
+import LocationService from '@/service/LocationService';
+import postService from '@/service/PostService';
 
 type Props = {
-    activity?:Activity
-}
+    activity?: Activity;
+};
 
-const CreatePostForm: React.FC<Props> = ({activity}:Props) => {
+const CreatePostForm: React.FC<Props> = ({ activity }: Props) => {
     const router = useRouter();
 
     const [postName, setPostName] = useState('');
@@ -24,14 +24,13 @@ const CreatePostForm: React.FC<Props> = ({activity}:Props) => {
 
     const [activityName, setActivityName] = useState('');
     const [activityDescription, setActivityDescription] = useState('');
-    const [locationName, setLocationName] = useState("");
+    const [locationName, setLocationName] = useState('');
 
     const [userName, setUsername] = useState('');
 
-
-    const [postNameError, setPostNameError] = useState("");
-    const [activityNameError, setActivityNameError] = useState("");
-    const [locationError, setLocationError] = useState("");
+    const [postNameError, setPostNameError] = useState('');
+    const [activityNameError, setActivityNameError] = useState('');
+    const [locationError, setLocationError] = useState('');
 
     useEffect(() => {
         const username = localStorage.getItem('loggedInUser');
@@ -39,7 +38,7 @@ const CreatePostForm: React.FC<Props> = ({activity}:Props) => {
     }, []);
 
     const clearErrors = () => {
-        setActivityNameError("");
+        setActivityNameError('');
     };
 
     const validate = (): boolean => {
@@ -76,19 +75,28 @@ const CreatePostForm: React.FC<Props> = ({activity}:Props) => {
         let postActivity;
         if (activity) {
             postActivity = activity;
-        }
-        else {
-            const location = await (await LocationService.createLocation({name: locationName})).json() as Location
-            const createdActivity = await (await ActivityService.createActivity({ name: activityName, description: activityDescription, location})).json() as Activity
+        } else {
+            const location = (await (
+                await LocationService.createLocation({ name: locationName })
+            ).json()) as Location;
+            const createdActivity = (await (
+                await ActivityService.createActivity({
+                    name: activityName,
+                    description: activityDescription,
+                    location,
+                })
+            ).json()) as Activity;
 
             postActivity = createdActivity;
         }
 
-    
-        const response = await postService.createPost({name:postName, description:postDescription, activity:postActivity}, userName)
+        const response = await postService.createPost(
+            { name: postName, description: postDescription, activity: postActivity },
+            userName
+        );
 
         if (response.status === 200) {
-            router.push('/')
+            router.push('/');
         }
     };
 
@@ -98,8 +106,8 @@ const CreatePostForm: React.FC<Props> = ({activity}:Props) => {
                 <title>Create a new planner</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
-            
-            <Paper sx={{p:3, m:3}}>
+
+            <Paper sx={{ p: 3, m: 3 }}>
                 <Typography component="h1" variant="h5">
                     Create a new post
                 </Typography>
@@ -117,7 +125,7 @@ const CreatePostForm: React.FC<Props> = ({activity}:Props) => {
                             setPostName(e.target.value);
                         }}
                     />
-                    {postNameError && <Typography color='warning'>{postNameError}</Typography>}
+                    {postNameError && <Typography color="warning">{postNameError}</Typography>}
                     <TextField
                         margin="normal"
                         fullWidth
@@ -130,55 +138,59 @@ const CreatePostForm: React.FC<Props> = ({activity}:Props) => {
                         }}
                     />
 
-                    {activity &&
-                    <Box padding={2}>
-                    <DisplayActivity activity={activity} displayIcons={false}/>
-                    </Box>
-                    }
+                    {activity && (
+                        <Box padding={2}>
+                            <DisplayActivity activity={activity} displayIcons={false} />
+                        </Box>
+                    )}
 
                     {!activity && (
                         <>
-                        <Paper sx={{m:2, p:2}}>
-                            <Typography>Activity</Typography>
-                            <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="name"
-                            label="Name"
-                            autoFocus
-                            type="text"
-                            onChange={(e) => {
-                                console.log("===")
-                                setActivityName(e.target.value);
-                            }}
-                            />
-                            {activityNameError && <Typography color='warning'>{activityNameError}</Typography>}
-                            <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="location"
-                            label="Location"
-                            autoFocus
-                            type="text"
-                            onChange={(e) => {
-                                setLocationName(e.target.value);
-                            }}
-                            />
-                            {locationError && <Typography color='warning'>{locationError}</Typography>}
-                            <TextField
-                            margin="normal"
-                            fullWidth
-                            name="description"
-                            label="Description"
-                            type="text"
-                            id="description"
-                            onChange={(e) => {
-                                setActivityDescription(e.target.value);
-                            }}
-                            />
-                        </Paper>
+                            <Paper sx={{ m: 2, p: 2 }}>
+                                <Typography>Activity</Typography>
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="name"
+                                    label="Name"
+                                    autoFocus
+                                    type="text"
+                                    onChange={(e) => {
+                                        console.log('===');
+                                        setActivityName(e.target.value);
+                                    }}
+                                />
+                                {activityNameError && (
+                                    <Typography color="warning">{activityNameError}</Typography>
+                                )}
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="location"
+                                    label="Location"
+                                    autoFocus
+                                    type="text"
+                                    onChange={(e) => {
+                                        setLocationName(e.target.value);
+                                    }}
+                                />
+                                {locationError && (
+                                    <Typography color="warning">{locationError}</Typography>
+                                )}
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    name="description"
+                                    label="Description"
+                                    type="text"
+                                    id="description"
+                                    onChange={(e) => {
+                                        setActivityDescription(e.target.value);
+                                    }}
+                                />
+                            </Paper>
                         </>
                     )}
 
@@ -191,7 +203,6 @@ const CreatePostForm: React.FC<Props> = ({activity}:Props) => {
                     >
                         Create!
                     </Button>
-
                 </Box>
             </Paper>
         </>

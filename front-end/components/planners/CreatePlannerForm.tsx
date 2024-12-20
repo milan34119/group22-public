@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Container, Box, Typography, TextField, Button, Link, Alert, Paper } from '@mui/material';
-import PlannerService from 'service/PlannerService';
-import styles from '@styles/home.module.css';
+import PlannerService from '@/service/PlannerService';
+import styles from '@/styles/home.module.css';
 import { useEffect, useState } from 'react';
-import { Planner, Post, User } from '@types';
+import { Planner, Post, User } from '@/types';
 import { t } from 'i18next';
 import { setEngine } from 'crypto';
 
@@ -14,8 +14,7 @@ const CreatePlannerForm: React.FC = () => {
     const [description, setDescription] = useState('');
     const [userName, setUsername] = useState('');
 
-
-    const [nameError, setNameError] = useState("");
+    const [nameError, setNameError] = useState('');
 
     useEffect(() => {
         const username = localStorage.getItem('loggedInUser');
@@ -23,7 +22,7 @@ const CreatePlannerForm: React.FC = () => {
     }, []);
 
     const clearErrors = () => {
-        setNameError("");
+        setNameError('');
     };
 
     const validate = (): boolean => {
@@ -46,11 +45,11 @@ const CreatePlannerForm: React.FC = () => {
             return;
         }
 
-        const planner = {name, description};
-        const response = await PlannerService.createPlannerForUser(planner, userName)
+        const planner = { name, description };
+        const response = await PlannerService.createPlannerForUser(planner, userName);
 
         if (response.status === 200) {
-            router.push('/')
+            router.push('/');
         }
     };
 
@@ -61,8 +60,7 @@ const CreatePlannerForm: React.FC = () => {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
 
-            
-            <Paper sx={{p:3, m:3}}>
+            <Paper sx={{ p: 3, m: 3 }}>
                 <Typography component="h1" variant="h5">
                     Create a new planner
                 </Typography>
@@ -80,7 +78,7 @@ const CreatePlannerForm: React.FC = () => {
                             setName(e.target.value);
                         }}
                     />
-                    {nameError && <Typography color='warning'>{nameError}</Typography>}
+                    {nameError && <Typography color="warning">{nameError}</Typography>}
                     <TextField
                         margin="normal"
                         fullWidth
@@ -101,7 +99,6 @@ const CreatePlannerForm: React.FC = () => {
                     >
                         Create!
                     </Button>
-
                 </Box>
             </Paper>
         </>
