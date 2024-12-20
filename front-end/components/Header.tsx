@@ -76,10 +76,8 @@ const Header: React.FC = () => {
                                     Welcome, {userName}
                                 </Typography>
                             </Stack>
-                        )}{' '}
-                        <Stack justifyContent={'center'} minWidth={200}>
-                            <Language />
-                        </Stack>
+                        )}
+                        {/* {' '} */}
                         {(!userName || role === 'guest') && (
                             <Box justifyContent={'center'} alignContent={'center'} padding={1}>
                                 <Link href="/user/login">
@@ -101,6 +99,7 @@ const Header: React.FC = () => {
                                 </Link>
                             </Box>
                         )}
+                        <Language/>
                     </Stack>
                 </Box>
             </Toolbar>

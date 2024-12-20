@@ -269,7 +269,19 @@ const UserSignupForm: React.FC = () => {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
 
-            <Language></Language>
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: 16,
+                    right: 16,
+                    backgroundColor: 'white',
+                    borderRadius: 1,
+                    boxShadow: 3,
+                    padding: 1,
+                }}
+            >
+            <Language/>
+            </Box>
 
             <Container component="main" maxWidth="xs">
                 <Box

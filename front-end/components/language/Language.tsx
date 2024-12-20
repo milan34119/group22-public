@@ -12,22 +12,10 @@ const Language: React.FC = () => {
     };
     return (
         <>
-            <Box
-                sx={{
-                    position: 'absolute',
-                    top: 16,
-                    right: 16,
-                    backgroundColor: 'white',
-                    borderRadius: 1,
-                    boxShadow: 3,
-                    padding: 1,
-                }}
-            >
                 <Select value={locale} onChange={handleLanguageChange}>
                     <MenuItem value="en">EN</MenuItem>
                     <MenuItem value="nl">NL</MenuItem>
                 </Select>
-            </Box>
         </>
     );
 };
