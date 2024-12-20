@@ -1,14 +1,26 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Container, Box, Typography, TextField, Button, Link } from '@mui/material';
+import {
+    Container,
+    Box,
+    Typography,
+    TextField,
+    Button,
+    Link,
+    FormControl,
+    Select,
+    MenuItem,
+} from '@mui/material';
 import UserService from 'service/UserService';
 import styles from '@styles/home.module.css';
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
+import Language from '@components/language/Language';
 
 const Home: React.FC = () => {
     const { t } = useTranslation('common');
     const router = useRouter();
+    const { locale, pathname, asPath, query } = router;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -62,12 +74,19 @@ const Home: React.FC = () => {
         }
     };
 
+    const handleLanguageChange = (event: { target: { value: string } }) => {
+        const newLocale = event.target.value;
+        router.push({ pathname, query }, asPath, { locale: newLocale });
+    };
+
     return (
         <>
             <Head>
                 <title>{t('page_title')}</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
+
+            <Language></Language>
 
             <Container component="main" maxWidth="xs">
                 <Box

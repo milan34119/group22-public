@@ -8,26 +8,26 @@ const Language: React.FC = () => {
 
     const handleLanguageChange = (event: { target: { value: string } }) => {
         const newLocale = event.target.value;
-        const { pathname, asPath, query } = router;
         router.push({ pathname, query }, asPath, { locale: newLocale });
     };
     return (
         <>
-            <div className="ml-6">
-                <label htmlFor="language" className="text-white">
-                    Language{' '}
-                </label>
-
-                <select
-                    id="language"
-                    className="ml-2 p-1"
-                    value={locale}
-                    onChange={handleLanguageChange}
-                >
-                    <option value="nl">Dutch</option>
-                    <option value="en">English</option>
-                </select>
-            </div>
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: 16,
+                    right: 16,
+                    backgroundColor: 'white',
+                    borderRadius: 1,
+                    boxShadow: 3,
+                    padding: 1,
+                }}
+            >
+                <Select value={locale} onChange={handleLanguageChange}>
+                    <MenuItem value="en">EN</MenuItem>
+                    <MenuItem value="nl">NL</MenuItem>
+                </Select>
+            </Box>
         </>
     );
 };

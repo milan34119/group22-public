@@ -6,8 +6,20 @@
     "login_button": "Log in",
     "username_error": "Name cannot be empty.",
     "password_error": "Password cannot be empty.",
-    "login_failed": "Password or username incorrect",
+    "login_error": "Password or username incorrect",
     "signup_prompt": "Don’t have an account?",
     "signup_link": "Sign up",
-    "guest_link": "continue as Guest"
+    "guest_link": "continue as Guest",
+    "no_account": "No account?",
+    "signup": "Sign up",
+    "continue_guest": "Continue as guest",
+    "signup_title": "Sign up - TravelBlog",
+    "signup_header": "Sign up for TravelBlog",
+    "name_label": "Name",
+    "email_label": "Email Address",
+    "signup_button": "Sign up",
+    "name_error": "Name cannot be empty.",
+    "email_error": "Email cannot be empty.",
+    "signin_prompt": "Already have an account?",
+    "login_link": "Log in"
 }
