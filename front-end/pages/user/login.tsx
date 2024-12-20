@@ -9,7 +9,7 @@ const UserLoginPage: React.FC = () => {
     return <UserLoginForm />;
 };
 
-export const getServerSideProps = async (context: { locale: any }) => {
+export const getServerSideProps = async (context: { locale: any; }) => {
     const { locale } = context;
     console.log(locale);
 

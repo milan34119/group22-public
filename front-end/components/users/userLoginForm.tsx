@@ -13,12 +13,16 @@ import {
 } from '@mui/material';
 import UserService from 'service/UserService';
 import styles from '@styles/home.module.css';
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import Language from '@components/language/Language';
 
 const Home: React.FC = () => {
+<<<<<<< HEAD
+    const { t, i18n } = useTranslation("en");
+=======
     const { t } = useTranslation('common');
+>>>>>>> 7f97b67edad5efc61efc8b681ec90d98e231e0f2
     const router = useRouter();
     const { locale, pathname, asPath, query } = router;
     const [username, setUsername] = useState('');
@@ -50,6 +54,11 @@ const Home: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        i18n.changeLanguage('en')
+        console.log(i18n.language)
+        console.log(t("title"))
+        console.log(t('test'))
 
         clearErrors();
 
@@ -89,6 +98,7 @@ const Home: React.FC = () => {
             <Language></Language>
 
             <Container component="main" maxWidth="xs">
+                
                 <Box
                     className={styles.form_container}
                     sx={{
@@ -105,6 +115,10 @@ const Home: React.FC = () => {
                         {t('login_header')}
                     </Typography>
 
+                    {/* <Box>
+                    <Language/>
+                    </Box> */}
+
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
@@ -116,7 +130,7 @@ const Home: React.FC = () => {
                             autoComplete="username"
                             autoFocus
                             type="text"
-                            onChange={(e) => {
+                            onChange={(e: { target: { value: SetStateAction<string>; }; }) => {
                                 setUsername(e.target.value);
                             }}
                         />
@@ -130,7 +144,7 @@ const Home: React.FC = () => {
                             type="password"
                             id="password"
                             autoComplete="current-password"
-                            onChange={(e) => {
+                            onChange={(e: { target: { value: SetStateAction<string>; }; }) => {
                                 setPassword(e.target.value);
                             }}
                         />
@@ -151,10 +165,10 @@ const Home: React.FC = () => {
                             </Link>
                         </Typography>
                         <Typography variant="body2" align="center">
-                            <Link href="/" variant="body2">
-                                {t('continue_guest')}
-                            </Link>
-                        </Typography>
+                            <Button onClick={() => (handleGuest())}>
+                                    {t('continue_guest')}
+                            </Button>
+                      </Typography>
                     </Box>
                 </Box>
             </Container>

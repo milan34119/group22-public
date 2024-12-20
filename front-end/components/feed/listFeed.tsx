@@ -55,7 +55,7 @@ const ListFeed: React.FC = () => {
                     }).map((post) => (
                     <Grid size={6} key={post.id}>    
                         <Paper elevation={3} sx={{p: 3 }}>
-                            <DisplayPost post={post} displayIcons={username?true:false}/>
+                            <DisplayPost post={post} displayIcons={(username && username != "GUEST")?true:false}/>
                         </Paper>
                     </Grid>
                     ))}
