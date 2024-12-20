@@ -13,13 +13,22 @@ import Header from '@/components/Header';
 import withAuth from '@/util/withAuth';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import RequirementTable from '@/components/requirementTable';
+import { jwtDecode } from 'jwt-decode';
+import { useRouter } from 'next/router';
+import noToken from '@/util/noToken';
+
+type DecodedToken = {
+    role: string;
+};
 
 const Home: React.FC = () => {
-    const [token, setToken] = useState<string | null>(null);
+    const [role, setRole] = useState("");
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setToken(token ? token : null);
+        const decodedToken = jwtDecode<DecodedToken>(token);
+        setRole(decodedToken.role);
     }, []);
 
     return (
@@ -37,7 +46,7 @@ const Home: React.FC = () => {
                 </Typography>
 
                 <Box display="flex" flexDirection="column" gap={3} mt={4}>
-                    {!token && (
+                    {(role == "guest") && (
                         <Link href="/user/login">
                             <Button color="inherit">
                                 <Card>
@@ -109,9 +118,11 @@ const Home: React.FC = () => {
                         </Button>
                     </Link>
                 </Box>
+
+                <RequirementTable/>
             </Container>
         </>
     );
 };
 
-export default Home;
+export default noToken(Home);

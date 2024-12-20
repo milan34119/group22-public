@@ -4,7 +4,7 @@ import { CommentInput, PostInput } from '../types';
 
 const postRouter = express.Router();
 
-postRouter.get('/', async (req:Request, res: Response) => {
+postRouter.get('/', async (req: Request, res: Response) => {
     try {
         const response = await PostService.getAllPosts()
 
@@ -14,8 +14,9 @@ postRouter.get('/', async (req:Request, res: Response) => {
     }
 })
 
-postRouter.post('/:username', async (req: Request, res: Response, next: NextFunction) => {
+postRouter.post('/:username', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
+        if (req.auth.role != 'admin' && req.auth.role != 'user') throw new Error('logged in user may not be a guest');
         const plannerInput = <PostInput>req.body;
         const userName = req.params.username
         const result = await PostService.createPostForUserByUsername(plannerInput, userName)
@@ -25,8 +26,9 @@ postRouter.post('/:username', async (req: Request, res: Response, next: NextFunc
     }
 });
 
-postRouter.put('/addComment/:id', async (req: Request, res: Response, next: NextFunction) => {
+postRouter.put('/addComment/:id', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
+        if (req.auth.role != 'admin' && req.auth.role != 'user') throw new Error('logged in user may not be a guest');
         const comment = (<CommentInput>req.body).comment;
         const id = parseInt(req.params.id)
         const response = await PostService.addCommentToPost(comment, id);

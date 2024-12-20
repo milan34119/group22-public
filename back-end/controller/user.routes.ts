@@ -1,11 +1,6 @@
 import UserService from '../service/User.service';
 import express, { NextFunction, Request, Response } from 'express';
-import { LoginInput, PostInput, UserInput, ActivityInput } from '../types';
-import { Post } from '../model/Post';
-import postDb from '../repository/post.db';
-import { Activity } from '../model/Activity';
-import { User } from '../model/User';
-import PostService from '../service/Post.service';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -39,7 +34,7 @@ const userRouter = express.Router();
  *         description: Internal server error.
  */
 
-userRouter.get('/', async (req: Request & { auth: any }, res: Response) => {
+userRouter.get('/', async (req: Request & { auth: any } & { auth: any }, res: Response) => {
     try {
         if (req.auth.role != 'admin') throw new Error('logged in user must be an admin');
         const allUsers = await UserService.getAllUsers();
@@ -80,8 +75,9 @@ userRouter.get('/', async (req: Request & { auth: any }, res: Response) => {
  *         description: Internal server error.
  */
 
-userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/:id', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
+        if (req.auth.role != 'admin' && req.auth.role != 'user') throw new Error('logged in user may not be a guest');
         const user = await UserService.getUserById(Number(req.params.id));
         res.status(200).json(user);
     } catch (error) {
@@ -114,8 +110,9 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *       500:
  *         description: Interne serverfout.
  */
-userRouter.get('/username/:username', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/username/:username', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
+        if (req.auth.role != 'admin' && req.auth.role != 'user') throw new Error('logged in user may not be a guest');
         const username = req.params.username;
         const user = await UserService.getUserByUsername({ username });
         res.status(200).json(user);
@@ -155,8 +152,9 @@ userRouter.get('/username/:username', async (req: Request, res: Response, next: 
  *       500:
  *         description: Interne serverfout.
  */
-userRouter.get('/:username/activities', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/:username/activities', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
+        if (req.auth.role != 'admin' && req.auth.role != 'user') throw new Error('logged in user may not be a guest');
         const user = await UserService.getAllUserActivitiesByUsername(String(req.params.username));
         res.status(200).json(user);
     } catch (error) {
@@ -255,7 +253,7 @@ userRouter.get('/:username/activities', async (req: Request, res: Response, next
  *                   example: "An unexpected error occurred."
  */
 
-userRouter.post('/registration', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/registration', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
         const userInput = <UserInput>req.body;
         const result = await UserService.createUser(userInput);
@@ -264,16 +262,6 @@ userRouter.post('/registration', async (req: Request, res: Response, next: NextF
         next(error);
     }
 });
-
-// userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const login = <LoginInput>req.body;
-//         const result = await UserService.login(login);
-//         res.status(200).json(result);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
 
 /**
  * @swagger
@@ -318,7 +306,7 @@ userRouter.post('/registration', async (req: Request, res: Response, next: NextF
  *       500:
  *         description: Interne serverfout.
  */
-userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/login', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
         const userInput = <UserInput>req.body;
         const response = await UserService.authenticate(userInput);
@@ -361,7 +349,7 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  *       500:
  *         description: Interne serverfout.
  */
-userRouter.delete('/:id', async (req: Request & { auth: any }, res: Response) => {
+userRouter.delete('/:id', async (req: Request & { auth: any } & { auth: any }, res: Response) => {
     try {
         if (req.auth.role != 'admin') throw new Error('logged in user must be an admin');
         const id = Number(req.params.id);

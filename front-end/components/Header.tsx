@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { AppBar, Toolbar, Typography, Box, Button, IconButton, Stack } from '@mui/material';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import Language from './language/Language';
 
 type DecodedToken = {
-    role?: string;
+    role: string;
 };
 
 const Header: React.FC = () => {
-    const router = useRouter();
     const [userName, setUsername] = useState('');
     const [role, setRole] = useState('guest');
 
@@ -21,17 +19,13 @@ const Header: React.FC = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (!token) setRole('guest');
-        else {
-            const decodedToken = jwtDecode<DecodedToken>(token);
-            setRole(decodedToken.role ? decodedToken.role : 'guest');
-        }
+        const decodedToken = jwtDecode<DecodedToken>(token);
+        setRole(decodedToken.role);
     }, []);
 
     const handleLogout = () => {
         localStorage.setItem('loggedInUser', '');
         localStorage.removeItem('token');
-        router.refresh();
     };
 
     return (
@@ -81,7 +75,10 @@ const Header: React.FC = () => {
                         {(!userName || role === 'guest') && (
                             <Box justifyContent={'center'} alignContent={'center'} padding={1}>
                                 <Link href="/user/login">
-                                    <Button sx={{ color: 'white', backgroundColor: 'red' }}>
+                                    <Button 
+                                        sx={{ color: 'white', backgroundColor: 'red' }}
+                                        onClick={handleLogout}
+                                    >
                                         Login
                                     </Button>
                                 </Link>
@@ -89,7 +86,7 @@ const Header: React.FC = () => {
                         )}
                         {userName && !(role === 'guest') && (
                             <Box justifyContent={'center'} alignContent={'center'} padding={1}>
-                                <Link href="/" passHref>
+                                <Link href="/user/login" passHref>
                                     <Button
                                         sx={{ color: 'white', backgroundColor: 'red' }}
                                         onClick={handleLogout}

@@ -5,8 +5,10 @@ import { ActivityInput } from '../types';
 const activityRouter = express.Router();
 
 
-activityRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+activityRouter.get('/:id', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
+        if (req.auth.role != 'admin' && req.auth.role != 'user') throw new Error('logged in user may not be a guest');
+
         const activityId = parseInt(req.params.id)
         const result = await ActivityService.getActivity(activityId);
         res.status(200).json(result);
@@ -15,8 +17,10 @@ activityRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
     }
 });
 
-activityRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+activityRouter.post('/', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
+        if (req.auth.role != 'admin' && req.auth.role != 'user') throw new Error('logged in user may not be a guest');
+
         const activityInput = <ActivityInput>req.body;
         const result = await ActivityService.createActivity(activityInput);
         res.status(200).json(result);

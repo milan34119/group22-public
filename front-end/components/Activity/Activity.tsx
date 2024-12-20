@@ -14,6 +14,7 @@ import Grid from '@mui/material/Grid2';
 import { Activity } from '@/types';
 import { useRouter } from 'next/router';
 import { FaBookmark, FaCircleCheck, FaCirclePlus, FaCircleXmark } from 'react-icons/fa6';
+import { ReactElement } from 'react';
 
 type Props = {
     activity: Activity;
@@ -33,7 +34,7 @@ const DisplayActivity: React.FC<Props> = ({ activity, displayIcons = true }: Pro
                         {displayIcons && (
                             <>
                                 <Grid size={1}>
-                                    <Tooltip title="Create a Post for this Activity">
+                                    <Tooltip  children={null as unknown as ReactElement}title="Create a Post for this Activity">
                                         <Link href={`/user/posts/createPost/${activity.id}`}>
                                             <IconButton sx={{ alignSelf: 'right' }} color="info">
                                                 <FaCirclePlus />
@@ -42,7 +43,7 @@ const DisplayActivity: React.FC<Props> = ({ activity, displayIcons = true }: Pro
                                     </Tooltip>
                                 </Grid>
                                 <Grid size={1}>
-                                    <Tooltip title="Add this activity to a Planner">
+                                    <Tooltip children={null as unknown as ReactElement} title="Add this activity to a Planner">
                                         <Link href={`/user/planners/addPlanner/${activity.id}`}>
                                             <IconButton sx={{ alignSelf: 'right' }} color="warning">
                                                 <FaBookmark />

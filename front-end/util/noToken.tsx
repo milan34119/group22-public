@@ -21,7 +21,7 @@ const tokenIsStillValid = (token: string):Boolean => {
 }
 
 
-const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
+const noToken = <P extends object>(WrappedComponent: ComponentType<P>) => {
     const AuthenticatedComponent = (props: P) => {
         const [isLoading, setIsLoading] = useState(true);
 
@@ -30,24 +30,10 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
 
             if (!token) {
                 router.push('/user/login');
-            } else {
-                try {
-                    const decodedToken = jwtDecode<DecodedToken>(token);
-                    if (!(decodedToken.role === 'admin') && !(decodedToken.role === "user")) {
-                        router.push('/user/login');
-                    } else {
-                        if(!tokenIsStillValid(token)){
-                            localStorage.removeItem('loggedInUser');
-                            localStorage.removeItem('token');
-                            router.push('/user/login')
-                        }
-                        else setIsLoading(false);
-                    }
-                } catch (error) {
-                    console.error('Failed to decode token:', error);
-                    router.push('/user/login');
-                }
+            }else {
+                setIsLoading(false);
             }
+
         }, [router]);
 
         if (isLoading) {
@@ -59,4 +45,4 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
     return AuthenticatedComponent;
 };
 
-export default withAuth;
+export default noToken;

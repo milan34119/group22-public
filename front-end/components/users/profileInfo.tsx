@@ -1,5 +1,5 @@
 import { Stack, Box, Typography, Paper, Container, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
-import { User } from "@types";
+import { User } from "@/types";
 import { Dispatch, SetStateAction, useState } from "react";
 
 type Props = {

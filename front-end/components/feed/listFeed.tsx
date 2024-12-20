@@ -60,7 +60,8 @@ const ListFeed: React.FC = () => {
                         {posts
                             .sort((a, b) => {
                                 if (parseTime(a.createdAt) > parseTime(b.createdAt)) return -1;
-                                return 1;
+                                if (parseTime(a.createdAt) < parseTime(b.createdAt)) return 1;
+                                return 0;
                             })
                             .map((post) => (
                                 <Grid size={6} key={post.id}>

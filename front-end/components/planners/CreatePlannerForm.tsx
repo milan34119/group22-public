@@ -55,7 +55,7 @@ const CreatePlannerForm: React.FC = () => {
 
     return (
         <>
-            <Head>
+            <Head children>
                 <title>Create a new planner</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>

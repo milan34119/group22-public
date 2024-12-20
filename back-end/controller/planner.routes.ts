@@ -6,8 +6,10 @@ import PlannerService from '../service/Planner.service';
 const plannerRouter = express.Router();
 
 
-plannerRouter.post('/create/:username', async (req: Request, res: Response, next: NextFunction) => {
+plannerRouter.post('/create/:username', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
+        if (req.auth.role != 'admin' && req.auth.role != 'user') throw new Error('logged in user may not be a guest');
+
         const plannerInput = <PlannerInput>req.body;
         const userName = req.params.username
         const result = await PlannerService.createPlannerForUserByUsername(plannerInput, userName)
@@ -17,8 +19,10 @@ plannerRouter.post('/create/:username', async (req: Request, res: Response, next
     }
 });
 
-plannerRouter.put("/add/:activityId/to/:plannerId", async (req: Request, res: Response, next: NextFunction) => {
+plannerRouter.put("/add/:activityId/to/:plannerId", async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
     try {
+        if (req.auth.role != 'admin' && req.auth.role != 'user') throw new Error('logged in user may not be a guest');
+
         const activityId = parseInt(req.params.activityId);
         const plannerId = parseInt(req.params.plannerId);
         const result = await PlannerService.addActivityToPlanner(activityId, plannerId);

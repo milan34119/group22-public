@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Activity, Post } from '@/types';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { FaCircleCheck, FaCirclePlus, FaCircleXmark, FaCommentDots } from 'react-icons/fa6';
 import postService from '@/service/PostService';
 
@@ -69,7 +69,7 @@ const DisplayPost: React.FC<Props> = ({ post, displayIcons = true }: Props) => {
                     {displayIcons && (
                         <>
                             <Grid size={1}>
-                                <Tooltip title="Leave a comment">
+                                <Tooltip children={null as unknown as ReactElement} title="Leave a comment">
                                     <IconButton
                                         sx={{ alignSelf: 'right' }}
                                         color="primary"

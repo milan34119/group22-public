@@ -98,7 +98,6 @@ const addActivityToPlanner = () => {
                                     onClick={() => handeleClick(planner)}
                                 >
                                     <DisplayPlanner
-                                        key={planner.id}
                                         planner={planner}
                                         displayIcons={false}
                                     />

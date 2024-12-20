@@ -16,6 +16,7 @@ import styles from '@/styles/home.module.css';
 import { SetStateAction, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import Language from '@/components/language/Language';
+import RequirementTable from '../requirementTable';
 
 const Home: React.FC = () => {
     const { t } = useTranslation('common');
@@ -93,14 +94,9 @@ const Home: React.FC = () => {
         }
     };
 
-    const handleLanguageChange = (event: { target: { value: string } }) => {
-        const newLocale = event.target.value;
-        router.push({ pathname, query }, asPath, { locale: newLocale });
-    };
-
     return (
         <>
-            <Head>
+            <Head children>
                 <title>{t('page_title')}</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
@@ -187,6 +183,9 @@ const Home: React.FC = () => {
                     </Box>
                 </Box>
             </Container>
+
+            <RequirementTable/>
+            
         </>
     );
 };

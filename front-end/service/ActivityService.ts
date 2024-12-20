@@ -1,4 +1,4 @@
-import { Location } from "@types";
+import { Location } from "@/types";
 
 const getActivityById = async (id:number) => {
     const token = localStorage.getItem('token');

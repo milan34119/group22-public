@@ -1,4 +1,4 @@
-import { Activity, Post } from "@types";
+import { Activity } from "@/types";
 
 const getAllPosts = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/post/`, {

@@ -28,23 +28,23 @@ const withAdminAuth = <P extends object>(WrappedComponent: React.ComponentType<P
             const token = localStorage.getItem('token');
 
             if (!token) {
-                router.push('/');
+                router.push('/user/login');
             } else {
                 try {
                     const decodedToken = jwtDecode<DecodedToken>(token);
                     if (decodedToken.role !== 'admin') {
-                        router.push('/');
+                        router.push('/user/login');
                     } else {
                         if(!tokenIsStillValid(token)){
                             localStorage.removeItem('loggedInUser');
                             localStorage.removeItem('token');
-                            router.push('/')
+                            router.push('/user/login')
                         }
                         else setIsLoading(false);
                     }
                 } catch (error) {
                     console.error('Failed to decode token:', error);
-                    router.push('/');
+                    router.push('/user/login');
                 }
             }
         }, [router]);
