@@ -1,9 +1,9 @@
 // import Head from 'next/head';
-// import UserService from 'service/UserService';
+// import UserService from '@/service/UserService';
 // import React, { ReactComponentElement, useState } from 'react';
 // import router, { useRouter } from 'next/router';
 // import { Alert, Box, Button, Container, Link, TextField, Typography } from '@mui/material';
-// import { StatusMessage } from '@types';
+// import { StatusMessage } from '@/types';
 // import { t } from 'i18next';
 
 // const UserSignupForm: React.FC = () => {
@@ -182,12 +182,12 @@
 // export default UserSignupForm;
 
 import Head from 'next/head';
-import UserService from 'service/UserService';
+import UserService from '@/service/UserService';
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Button, Container, Link, TextField, Typography } from '@mui/material';
 import { useTranslation } from 'next-i18next';
-import Language from '@components/language/Language';
+import Language from '@/components/language/Language';
 
 const UserSignupForm: React.FC = () => {
     const { t } = useTranslation('common');

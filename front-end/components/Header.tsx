@@ -46,7 +46,6 @@ const Header: React.FC = () => {
                         <Button sx={{ color: 'white' }}>Feed</Button>
                     </Link>
 
-                    
                     {(role === 'admin' || role === 'user') && (
                         <Link href={`/user/${userName}`} passHref>
                             <Button sx={{ color: 'white' }}>My profile</Button>
@@ -69,33 +68,38 @@ const Header: React.FC = () => {
                         </Link>
                     )}
                 </Stack>
-                <Box >
-                    <Stack direction={"row"}>
-                        {userName &&  !(role === "guest") && (
-                            <Stack justifyContent={"center"}>
-                            <Typography sx={{ color: 'white', marginRight: 2 }}>
-                                Welcome, {userName}
-                            </Typography>
+                <Box>
+                    <Stack direction={'row'}>
+                        {userName && !(role === 'guest') && (
+                            <Stack justifyContent={'center'}>
+                                <Typography sx={{ color: 'white', marginRight: 2 }}>
+                                    Welcome, {userName}
+                                </Typography>
                             </Stack>
-                        )}
-                        {/* <Stack justifyContent={"center"} minWidth={200}>
+                        )}{' '}
+                        <Stack justifyContent={'center'} minWidth={200}>
                             <Language />
                         </Stack>
-                        {(!userName || (role === "guest")) && (
-                        <Box justifyContent={"center"} alignContent={"center"} padding={1}>
-                        <Link href="/user/login" >
-                            <Button sx={{ color: 'white' , backgroundColor:"red"}}>Login</Button>
-                        </Link>
-                        </Box>
+                        {(!userName || role === 'guest') && (
+                            <Box justifyContent={'center'} alignContent={'center'} padding={1}>
+                                <Link href="/user/login">
+                                    <Button sx={{ color: 'white', backgroundColor: 'red' }}>
+                                        Login
+                                    </Button>
+                                </Link>
+                            </Box>
                         )}
-                        {userName && !(role === "guest") && (
-                        <Box justifyContent={"center"} alignContent={"center"} padding={1}>
-                        <Link href="/" passHref>
-                            <Button sx={{ color: 'white', backgroundColor:"red" }} onClick={handleLogout}>
-                                Logout
-                            </Button>
-                        </Link>
-                        </Box>
+                        {userName && !(role === 'guest') && (
+                            <Box justifyContent={'center'} alignContent={'center'} padding={1}>
+                                <Link href="/" passHref>
+                                    <Button
+                                        sx={{ color: 'white', backgroundColor: 'red' }}
+                                        onClick={handleLogout}
+                                    >
+                                        Logout
+                                    </Button>
+                                </Link>
+                            </Box>
                         )}
                     </Stack>
                 </Box>

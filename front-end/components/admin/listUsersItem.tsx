@@ -1,5 +1,5 @@
 import { Card, CardContent, Typography, IconButton } from '@mui/material';
-import { User } from '@types';
+import { User } from '@/types';
 import { FaCircleXmark } from 'react-icons/fa6';
 
 type Props = {
@@ -31,13 +31,15 @@ const ListUserItem: React.FC<Props> = ({ user, deleteUser }: Props) => {
                 </Typography>
             </CardContent>
 
-            {user.username != localStorage.getItem('loggedInUser') && <IconButton
-                sx={{ position: 'absolute', top: 8, right: 8 }}
-                color="error"
-                onClick={() => user.id && deleteUser(user.id)}
-            >
-                <FaCircleXmark />
-            </IconButton>}
+            {user.username != localStorage.getItem('loggedInUser') && (
+                <IconButton
+                    sx={{ position: 'absolute', top: 8, right: 8 }}
+                    color="error"
+                    onClick={() => user.id && deleteUser(user.id)}
+                >
+                    <FaCircleXmark />
+                </IconButton>
+            )}
         </Card>
     );
 };

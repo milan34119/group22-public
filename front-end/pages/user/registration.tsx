@@ -1,9 +1,9 @@
 import Head from 'next/head';
-import UserService from 'service/UserService';
+import UserService from '@/service/UserService';
 import React, { ReactComponentElement } from 'react';
 import router, { useRouter } from 'next/router';
 import { Box, Button, Container, Link, TextField, Typography } from '@mui/material';
-import UserSignupForm from '@components/users/userSignUpForm';
+import UserSignupForm from '@/components/users/userSignUpForm';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const UserSignupPage: React.FC = () => {
